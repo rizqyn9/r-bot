@@ -1,20 +1,22 @@
 import {config} from "dotenv";
 config();
-import RBot from "./src/lib/RBot";
+import {RBot} from "./src/Rbot";
 import {enumCommand, FigletChalkStarter, Logger} from "./src/utils/logger"
 import {MongoConnect} from "./src/lib/MongoConnect";
 import * as Schema from "./src/Models";
 import {Message} from "./src/MessageHandler";
-import {InitRedis, RedisStore} from "./src/lib/Redis";
+import {RedisStore} from "./src/lib/Redis";
 
-async function Start(): Promise<void> {
+async function Start(){
     try {
+        FigletChalkStarter("RBOT");
+
         await MongoConnect(String(process.env.MONGO_URI))
 
         // const redisClient = InitRedis();
         const redisClient = new RedisStore()
 
-        const rbot = new RBot(Schema.Group, Schema.User, Schema.Session);
+        const rbot = new RBot(Schema.Group, Schema.User, Schema.Session, redisClient);
         rbot.logger.level = "warn";
 
         // Find existing session
@@ -32,9 +34,17 @@ async function Start(): Promise<void> {
             if(!update.messages) return;
             const {messages} = update;
             const all = messages.all();
-            const validatedMesssage = msg.validate(all[0]);
-            if(!validatedMesssage) return;
-            msg.msgHandler(validatedMesssage)
+
+            try{
+
+                const validatedMesssage = msg.validate(all[0]);
+                if(!validatedMesssage) return;
+                msg.msgHandler(validatedMesssage)
+                rbot.checkAuth("123")
+            } catch (e) {
+                Logger.error(e)
+                // rbot.sendMessage(update)
+            }
         })
 
         // Run our server
@@ -47,10 +57,7 @@ async function Start(): Promise<void> {
 }
 
 Start().then(()=>{
-    FigletChalkStarter("RBOT");
-}).catch(e => {
-    console.log(e)
-});
+})
 
 /**
  * Init DB (Mongo)

@@ -32,6 +32,36 @@ export class RedisStore {
             Logger.redisDone("Redis already to use", enumCommand.RDIS)
         })
     }
+
+    async checkExitsKey(key:string): Promise<boolean> {
+        return await this.redisClient.exists(key).then(value => {
+            console.log(value)
+            return value == 1
+        })
+    }
+
+    async getDataObj<T>(key:string): Promise<string|false|any> {
+        await this.redisClient.hgetall(key).then((val) => {
+            console.log(val)
+            if(val) return val
+            return false
+        })
+    }
+
+    async setDataObj (key: string, data: {[key:string] : any}): Promise<boolean>{
+        let res: boolean = false;
+        await this.redisClient.hmset(key, data ,(err, val) => res = !err)
+        console.log(res)
+        return res;
+    }
 }
 
+interface IGroupData {
+    name: string,
+    data: boolean
+}
+
+interface IPersonData {
+    name: string
+}
 

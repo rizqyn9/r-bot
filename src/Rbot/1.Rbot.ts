@@ -1,18 +1,17 @@
-import {WA, WAConnection} from "@adiwajshing/baileys"
+import {WAConnection} from "@adiwajshing/baileys"
 import {existsSync, writeFileSync} from "fs-extra"
 import {join} from "path";
-import {IGroupModel, ISessionModel, IUserModel} from "../type/mongo"
 import {Model} from "mongoose"
-import {IConfig} from "../type/type";
-import {ISession} from "../type/client"
+import {IConfig, ISession, IGroupModel, ISessionModel, IUserModel} from "../type";
+import {RedisStore} from "../lib/Redis";
 
 const browser: [string, string, string] = ["R-Bot", "Well", "Indeed"];
 
-export default class RBot extends WAConnection {
+export class RBot extends WAConnection {
 
     browserDescription = browser
 
-    private config: IConfig = {
+    private config: Partial<IConfig> = {
         admins: this.getModerator(),
         name: String(process.env.BOT_NAME) || "R-BOT",
         prefix: String(process.env.PREFIX) || "#"
@@ -20,7 +19,8 @@ export default class RBot extends WAConnection {
     constructor(
         public GroupModel: Model<IGroupModel>,
         public UserModel: Model<IUserModel>,
-        public SessionModel: Model<ISessionModel>
+        public SessionModel: Model<ISessionModel>,
+        public RedisClient: RedisStore
     ) {
         super();
         this.emit("config", this.config);

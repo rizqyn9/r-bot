@@ -1,11 +1,13 @@
-import RBot from "../lib/RBot"
-import {MessageType, WA, WAMessage} from "@adiwajshing/baileys";
-import {IValidMessage, IValidatedMsg} from "../type/message";
+import {RBot} from "../Rbot"
+import {MessageType, WAMessage} from "@adiwajshing/baileys";
+import {IValidatedMsg, IValidMessage} from "../type";
 
 export class Message {
     validTypes = [MessageType.text, MessageType.video, MessageType.image, MessageType.extendedText]
 
-    constructor(rbot: RBot) {
+    constructor(
+        public rbot: RBot
+    ) {
 
     }
 
@@ -27,12 +29,16 @@ export class Message {
         const dataValid: IValidatedMsg = {
             prefix: "#",
             type: type as MessageType,
-            targetChat : msg.key.remoteJid?.endsWith('g.us') ? 'group' : 'dm'
+            isGroup : Boolean(msg.key.remoteJid?.endsWith('g.us'))
         }
         return Object.assign<WAMessage, IValidatedMsg>(msg, dataValid);
     }
 
-    msgHandler(msg: IValidMessage){
+
+
+    async msgHandler(msg: IValidMessage){
+        console.log(msg)
+        await this.rbot.sendMessage(<string>msg.key.remoteJid, "hahah", MessageType.text)
         if(msg.prefix == "#"){
 
         }
