@@ -3,7 +3,9 @@ config();
 import RBot from "./src/lib/RBot";
 import {enumCommand, Logger} from "./src/utils/logger"
 import {MongoConnect} from "./src/lib/MongoConnect";
-import * as Schema from "./src/Models"
+import * as Schema from "./src/Models";
+import {Message} from "./src/MessageHandler";
+import {WAMessage} from "@adiwajshing/baileys";
 
 async function Start(){
     try {
@@ -16,11 +18,23 @@ async function Start(){
         const existSession = await rbot.getSession(process.env.SESSION_ID || "R-Bot");
         if(existSession) rbot.loadAuthInfo(existSession);
 
+        const msg = new Message(rbot);
+
         rbot.on("open", () => {
             rbot.updateSession(process.env.SESSION_ID || "R-Bot");
             rbot.writeFileSession();
         })
 
+        rbot.on("chat-update", (update) => {
+            if(!update.messages) return;
+            const {messages} = update;
+            const all = messages.all();
+            const validatedMesssage = msg.validate(all[0]);
+            if(!validatedMesssage) return;
+            msg.msgHandler(validatedMesssage)
+        })
+        
+        // Run our server
         await rbot.connect()
 
     }catch (e) {
