@@ -4,7 +4,7 @@ import {Logger} from "../utils/logger";
 export async function MongoConnect(URI: string): Promise<void> {
     return new Promise(((resolve, reject) => {
         mongoose.connect(encodeURI(URI)).then(()=>{
-            Logger.custom("Success Connected to Database", "[MONGO]");
+            Logger.custom("Success Connected to Database", "[MONGO]", 183);
             resolve();
         }).catch(()=>{
             Logger.error("Cannot found ", "[MONGO]");

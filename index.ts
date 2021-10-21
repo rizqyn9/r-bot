@@ -1,13 +1,13 @@
 import {config} from "dotenv";
 config();
 import RBot from "./src/lib/RBot";
-import {enumCommand, Logger} from "./src/utils/logger"
+import {enumCommand, FigletChalkStarter, Logger} from "./src/utils/logger"
 import {MongoConnect} from "./src/lib/MongoConnect";
 import * as Schema from "./src/Models";
 import {Message} from "./src/MessageHandler";
 import {InitRedis, RedisStore} from "./src/lib/Redis";
 
-async function Start(){
+async function Start(): Promise<void> {
     try {
         await MongoConnect(String(process.env.MONGO_URI))
 
@@ -42,12 +42,12 @@ async function Start(){
 
     }catch (e) {
         Logger.error(`Error ${e}`)
-        // process.abort();
+        process.exit();
     }
 }
 
 Start().then(()=>{
-    Logger.bot("Ready for use");
+    FigletChalkStarter("RBOT");
 }).catch(e => {
     console.log(e)
 });
