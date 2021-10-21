@@ -5,11 +5,14 @@ import {enumCommand, Logger} from "./src/utils/logger"
 import {MongoConnect} from "./src/lib/MongoConnect";
 import * as Schema from "./src/Models";
 import {Message} from "./src/MessageHandler";
-import {WAMessage} from "@adiwajshing/baileys";
+import {InitRedis, RedisStore} from "./src/lib/Redis";
 
 async function Start(){
     try {
         await MongoConnect(String(process.env.MONGO_URI))
+
+        // const redisClient = InitRedis();
+        const redisClient = new RedisStore()
 
         const rbot = new RBot(Schema.Group, Schema.User, Schema.Session);
         rbot.logger.level = "warn";
@@ -33,7 +36,7 @@ async function Start(){
             if(!validatedMesssage) return;
             msg.msgHandler(validatedMesssage)
         })
-        
+
         // Run our server
         await rbot.connect()
 

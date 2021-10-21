@@ -1,11 +1,11 @@
 import mongoose, {mongo} from "mongoose"
 import {Logger} from "../utils/logger";
 
-export async function MongoConnect(URI: string): Promise<any> {
+export async function MongoConnect(URI: string): Promise<void> {
     return new Promise(((resolve, reject) => {
         mongoose.connect(encodeURI(URI)).then(()=>{
             Logger.custom("Success Connected to Database", "[MONGO]");
-            resolve("Okay")
+            resolve();
         }).catch(()=>{
             Logger.error("Cannot found ", "[MONGO]");
             throw new Error("Cannot found mongoDB");

@@ -33,6 +33,8 @@ export class Message {
     }
 
     msgHandler(msg: IValidMessage){
-        console.log(msg)
+        if(msg.prefix == "#"){
+
+        }
     }
 }
