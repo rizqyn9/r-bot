@@ -16,7 +16,7 @@ async function Start(){
         // const redisClient = InitRedis();
         const redisClient = new RedisStore()
 
-        const rbot = new RBot(Schema.Group, Schema.User, Schema.Session, redisClient);
+        const rbot = new RBot(Schema.GroupModels, Schema.UserModels, Schema.SessionModels, redisClient);
         rbot.logger.level = "warn";
 
         // Find existing session
@@ -36,11 +36,11 @@ async function Start(){
             const all = messages.all();
 
             try{
+                rbot.checkAuth("123")
 
                 const validatedMesssage = msg.validate(all[0]);
                 if(!validatedMesssage) return;
                 msg.msgHandler(validatedMesssage)
-                rbot.checkAuth("123")
             } catch (e) {
                 Logger.error(e)
                 // rbot.sendMessage(update)

@@ -1,8 +1,8 @@
 import {WAConnection} from "@adiwajshing/baileys"
 import {existsSync, writeFileSync} from "fs-extra"
 import {join} from "path";
-import {Model} from "mongoose"
-import {IConfig, ISession, IGroupModel, ISessionModel, IUserModel} from "../type";
+import {IConfig} from "../type";
+import {GroupModels, UserModels, SessionModels, SessionParse} from "../Models"
 import {RedisStore} from "../lib/Redis";
 
 const browser: [string, string, string] = ["R-Bot", "Well", "Indeed"];
@@ -17,9 +17,6 @@ export class RBot extends WAConnection {
         prefix: String(process.env.PREFIX) || "#"
     }
     constructor(
-        public GroupModel: Model<IGroupModel>,
-        public UserModel: Model<IUserModel>,
-        public SessionModel: Model<ISessionModel>,
         public RedisClient: RedisStore
     ) {
         super();
@@ -35,9 +32,9 @@ export class RBot extends WAConnection {
         return [`${process.env.ADMINS}@s.whatsapp.net`]
     }
 
-    async getSession(id: string): Promise<ISession | false>{
+    async getSession(id: string): Promise<SessionParse | false>{
         if(existsSync(`./sessions/${id}.session.json`)) return require(join(__dirname, '..', '..', `./sessions/${id}.session.json`))
-        const session = await this.SessionModel.findOne({id})
+        const session = await SessionModels.findOne({id})
         if(!session) return false;
         return session.session;
     }
