@@ -6,6 +6,7 @@ import {MongoConnect} from "./src/lib/MongoConnect";
 import * as Schema from "./src/Models";
 import {Message} from "./src/MessageHandler";
 import {RedisStore} from "./src/lib/Redis";
+import {RMessage} from "./src/type";
 
 async function Start(){
     try {
@@ -13,11 +14,11 @@ async function Start(){
 
         await MongoConnect(String(process.env.MONGO_URI))
 
+        /** Depreceated */
         // const redisClient = InitRedis();
         // const redisClient = new RedisStore()
 
         const rbot = new RBot();
-        rbot.logger.level = "warn";
 
         // Find existing session
         const existSession = await rbot.getSession(process.env.SESSION_ID || "R-Bot");
@@ -30,18 +31,16 @@ async function Start(){
             rbot.writeFileSession();
         })
 
-        rbot.on("chat-update", (update) => {
+        rbot.on("chat-update", async (update) => {
             if(!update.messages) return;
             const {messages} = update;
             const all = messages.all();
 
             try{
-                console.log(all)
-                console.log(
-                    rbot.parseMassage(all[0])
+                const msg: RMessage = await rbot.messageParser(all[0])
+                const auth = await rbot.checkAuth(msg.sender.jid)
 
-                )
-                // rbot.checkAuth(all[0])
+                console.log(auth)
                 //
                 // const validatedMesssage = msg.validate(all[0]);
                 // if(!validatedMesssage) return;

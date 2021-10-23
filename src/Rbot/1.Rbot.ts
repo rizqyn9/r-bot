@@ -22,7 +22,8 @@ export class RBot extends WAConnection {
         super();
         this.redisClient = new RedisStore();
         this.emit("config", this.config);
-        // this.on("chat-update", this)
+
+        this.logger.level = "warn";
     }
 
     emitMessage = async (M:Promise<RMessage>): Promise<void> => void this.emit("rbot-new-message", await M)

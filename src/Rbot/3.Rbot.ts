@@ -1,34 +1,63 @@
 import {RBot as Base} from "./2.Rbot"
-import {MessageType, proto, WAMessage} from "@adiwajshing/baileys";
-import {ParseMsg, Prefix, SimpleMsg} from "../type";
-import IMessage = proto.IMessage;
-import {config} from "dotenv";
+import {MessageType, WAMessage} from "@adiwajshing/baileys";
+import {Prefix, RGroupMetaData, RMessage} from "../type";
 
 // Massage Handler
 export class RBot extends Base{
 
-    parseMassage(msg: WAMessage): ParseMsg | false {
-        if(!msg.message) return false;
-        if(msg.key.fromMe) return false;
-        if(msg.key.remoteJid?.endsWith('broadcast')) return false;
+    supportedMediaMessage = [MessageType.image, MessageType.video, MessageType.extendedText]
 
-        let type: MessageType = Object.keys(msg.message)[0] as MessageType;
+    async messageParser(M: WAMessage): Promise<RMessage> {
+        if(M.message?.ephemeralMessage) M.message = M.message.ephemeralMessage.message
+        const jid = M.key.remoteJid || ""
+        const isGroup = jid.endsWith('g.us')
+        const type = (Object.keys(M.message || {})[0] || '') as MessageType
+        const user = isGroup ? M.participant : jid;
+        const info = this.getContact(user);
+        const groupMetaData : RGroupMetaData | null =
+            isGroup ? await this.groupMetadata(jid) : null
+        if(groupMetaData)
+            groupMetaData.admins = groupMetaData.participants.filter(user => user.isAdmin).map(user => user.jid);
+        const sender = {
+            jid : user,
+            username : info.notify || info.vname || info.name || 'RBot anonymous',
+            isAdmin : groupMetaData?.admins?.includes(user) || false
+        }
+        const content: string | null =
+            type === MessageType.text && M.message?.conversation
+                ? M.message.conversation
+                : this.supportedMediaMessage.includes(type)
+                ? this.supportedMediaMessage
+                    .map((type) => M.message?.[type as MessageType.image | MessageType.video]?.caption)
+                    .filter((caption) => caption)[0] || ''
+                : type === MessageType.extendedText && M.message?.extendedTextMessage?.text
+                    ? M.message?.extendedTextMessage.text
+                    : null
+        const quoted: RMessage['quoted'] = {}
+        quoted.message = M?.message?.[type as MessageType.extendedText]?.contextInfo?.quotedMessage
+            ? JSON.parse(JSON.stringify(M).replace('quotedM', 'm')).message?.[type as MessageType.extendedText].contextInfo
+            : null
+        quoted.sender = M.message?.[type as MessageType.extendedText]?.contextInfo?.participant || null
 
-        let caption = this.getCaption(msg.message, type)
-        let prefix = caption ? this.getPrefix(caption) : false
-
-        const res:SimpleMsg = {
-            jid: "a",
-            prefix,
+        return {
             type,
-            isGroup: Boolean(msg.key.remoteJid?.endsWith('g.us')),
-            caption
-        };
-
-        return Object.assign(msg, res);
+            isGroup,
+            content,
+            groupMetadata: groupMetaData,
+            mentioned: this.getMentionedUsers(M, type),
+            prefix: content ? this.getPrefix(content) : null,
+            sender,
+            quoted,
+            WAMessage: M,
+            urls: ''            //#TODO
+        }
     }
 
-    getPrefix(txt: string): Prefix | false {
+    getContact(jid: string){
+        return this.contacts[jid] || ""
+    }
+
+    getPrefix(txt: string): Prefix | null {
         try{
             let res: Partial<Prefix> = {}
             let pref: string = txt.trim()
@@ -52,22 +81,17 @@ export class RBot extends Base{
             };
         }
         catch (e) {
-            console.log(e);
-            return false;
+            // console.log(e);
+            return null;
         }
     }
 
-    getCaption(msg: IMessage, type:MessageType): string | null | undefined {
-        switch (type) {
-            case MessageType.text:
-                return msg.conversation
-            case MessageType.image:
-                return msg.imageMessage?.caption
-            case MessageType.extendedText:
-                return msg.extendedTextMessage?.text
-            case MessageType.video:
-                return msg.videoMessage?.caption
-        }
-        return null
+    getMentionedUsers = (M: WAMessage, type: string): string[] => {
+        const notEmpty = <TValue>(value: TValue | null | undefined): value is TValue =>
+            value !== null && value !== undefined
+        const array = M?.message?.[type as MessageType.extendedText]?.contextInfo?.mentionedJid
+            ? M?.message[type as MessageType.extendedText]?.contextInfo?.mentionedJid
+            : []
+        return (array || []).filter(notEmpty)
     }
 }

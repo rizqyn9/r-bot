@@ -14,8 +14,7 @@ export class RBot extends Base{
             ).then()
     }
 
-    async checkAuth(msg: WAMessage){
-        let key:string = "2314"
+    async checkAuth(key: string){
         await this.redisClient.checkExitsKey(key).then( async res => {
             if(res) {
                 Logger.redisDone("Found cache")

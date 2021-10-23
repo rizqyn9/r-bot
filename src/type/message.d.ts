@@ -1,4 +1,4 @@
-import {MessageType, WAMessage} from "@adiwajshing/baileys";
+import {MessageType, WAGroupMetadata, WAMessage} from "@adiwajshing/baileys";
 
 export type ParseMsg = SimpleMsg & WAMessage
 
@@ -20,5 +20,29 @@ export type Prefix = {
 export interface IValidMessage extends IValidatedMsg , WAMessage { }
 
 export type RMessage = {
+    type: MessageType
+    prefix: Prefix | null
+    isGroup: boolean
+    mentioned: string[]
+    content: string | null
+    groupMetadata?: RGroupMetaData | null
+    sender: {
+        jid: string
+        username: string
+        isAdmin: boolean
+    }
+    quoted?: {
+        message?: WAMessage
+        sender?: string | null
+    }
+    WAMessage: WAMessage
+    urls: string[] | string
+}
 
+export type RQuotedMessage = {
+
+}
+
+export interface RGroupMetaData extends WAGroupMetadata{
+    admins? : string[]
 }
