@@ -1,13 +1,6 @@
 import { WAParticipantAction, WAContact } from '@adiwajshing/baileys'
 import { Document } from "mongoose"
 
-export interface IConfig {
-    name: string
-    prefix: string
-    admins: string[]
-    cron: string | null
-}
-
 export interface IEvent {
     jid: string
     participants: string[]

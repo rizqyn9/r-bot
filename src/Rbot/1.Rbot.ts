@@ -1,7 +1,7 @@
 import {WAConnection} from "@adiwajshing/baileys"
 import {existsSync, writeFileSync} from "fs-extra"
 import {join} from "path";
-import {IConfig} from "../type";
+import {IConfig, RMessage} from "../type";
 import {GroupModels, UserModels, SessionModels, SessionParse} from "../Models"
 import {RedisStore} from "../lib/Redis";
 
@@ -11,17 +11,21 @@ export class RBot extends WAConnection {
 
     browserDescription = browser
 
-    private config: Partial<IConfig> = {
+    public config: IConfig = {
         admins: this.getModerator(),
         name: String(process.env.BOT_NAME) || "R-BOT",
-        prefix: String(process.env.PREFIX) || "#"
+        prefix: ["#", "!"]
     }
-    constructor(
-        public RedisClient: RedisStore
-    ) {
+
+    public redisClient: RedisStore ;
+    constructor() {
         super();
+        this.redisClient = new RedisStore();
         this.emit("config", this.config);
+        // this.on("chat-update", this)
     }
+
+    emitMessage = async (M:Promise<RMessage>): Promise<void> => void this.emit("rbot-new-message", await M)
 
     getModerator(): string[] {
         if (!process.env.ADMINS) return []

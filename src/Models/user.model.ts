@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import {RegistDetails} from "../type";
 
 export type UserData = {

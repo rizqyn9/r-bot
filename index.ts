@@ -14,9 +14,9 @@ async function Start(){
         await MongoConnect(String(process.env.MONGO_URI))
 
         // const redisClient = InitRedis();
-        const redisClient = new RedisStore()
+        // const redisClient = new RedisStore()
 
-        const rbot = new RBot(Schema.GroupModels, Schema.UserModels, Schema.SessionModels, redisClient);
+        const rbot = new RBot();
         rbot.logger.level = "warn";
 
         // Find existing session
@@ -36,11 +36,16 @@ async function Start(){
             const all = messages.all();
 
             try{
-                rbot.checkAuth("123")
+                console.log(all)
+                console.log(
+                    rbot.parseMassage(all[0])
 
-                const validatedMesssage = msg.validate(all[0]);
-                if(!validatedMesssage) return;
-                msg.msgHandler(validatedMesssage)
+                )
+                // rbot.checkAuth(all[0])
+                //
+                // const validatedMesssage = msg.validate(all[0]);
+                // if(!validatedMesssage) return;
+                // msg.msgHandler(validatedMesssage)
             } catch (e) {
                 Logger.error(e)
                 // rbot.sendMessage(update)
