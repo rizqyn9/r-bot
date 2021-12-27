@@ -31,6 +31,11 @@ async function Start(){
             rbot.writeFileSession();
         })
 
+        rbot.on("qr", (qr) => {
+            console.log(qr);
+            
+        })
+
         rbot.on("chat-update", async (update) => {
             if(!update.messages) return;
             const {messages} = update;

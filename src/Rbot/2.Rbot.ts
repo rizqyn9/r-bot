@@ -2,7 +2,6 @@ import {RBot as Base} from "./1.Rbot";
 import {Logger} from "../utils/logger";
 import {InputRegister} from "../type";
 import {GroupData, GroupModels, UserData} from "../Models";
-import {WAMessage} from "@adiwajshing/baileys";
 
 export class RBot extends Base{
     async register(data: GroupData, isGroup: boolean): Promise<void>{
