@@ -6,25 +6,32 @@
   "scripts": {
     "build": "tsc -p .",
     "production": "node dist",
-    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts"
+    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",
+    "test": "nodemon --watch './**/*.ts' --exec 'ts-node' ./src/Rbot/1.Rbot.ts"
   },
   "author": "rizqyn9 <54632504+rizqyn9@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "@adiwajshing/baileys": "^3.5.2",
+    "@adiwajshing/baileys": "^4.0.0",
+    "@adiwajshing/keyed-db": "^0.2.4",
+    "@hapi/boom": "^9.1.4",
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "figlet": "^1.5.2",
     "fs-extra": "^10.0.0",
+    "global": "^4.4.0",
     "ioredis": "^4.28.0",
     "mongoose": "^6.0.11",
+    "nodemon": "^2.0.15",
+    "pino": "^7.6.4",
+    "qrcode-terminal": "^0.12.0",
     "typescript": "^4.4.4"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.4",
     "@types/fs-extra": "^9.0.13",
     "@types/ioredis": "^4.27.8",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.1",
     "ts-node": "^10.3.0"
   }
 }
