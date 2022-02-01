@@ -1,5 +1,15 @@
 import { model, Schema } from 'mongoose'
-import { IGroupModel } from '../type/mongo'
+import {RegistDetails} from "../type";
+
+export type GroupData = {
+    jid: string
+    address: string
+    groupName: string
+    isBanned: boolean
+    isRegistered: boolean
+    groupMember: string[]
+    dataRegist: RegistDetails | false
+}
 
 const GroupSchema = new Schema({
     jid: {
@@ -7,26 +17,28 @@ const GroupSchema = new Schema({
         required: true,
         unique: true
     },
-    events: {
+    address:{
+        type: String
+    },
+    groupName: {
+        type: String,
+        required: true,
+    },
+    isBanned: {
         type: Boolean,
-        required: false,
         default: false
     },
-    nsfw: {
+    isRegistered: {
         type: Boolean,
-        required: false,
         default: false
     },
-    safe: {
-        type: Boolean,
-        required: false,
-        default: false
+    groupMember: {
+        type: Array
     },
-    mod: {
-        type: Boolean,
-        required: false,
+    dataRegist:{
+        type: Object || Boolean,
         default: false
     }
 })
 
-export const Group = model<IGroupModel>('groups', GroupSchema)
+export const GroupModels = model<GroupData>('groups', GroupSchema)

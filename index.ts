@@ -1,43 +1,33 @@
-import {config} from "dotenv";
+import { config } from "dotenv";
+import RBot from "./src/Rbot";
 config();
-import RBot from "./src/lib/RBot";
-import {enumCommand, Logger} from "./src/utils/logger"
-import {MongoConnect} from "./src/lib/MongoConnect";
-import * as Schema from "./src/Models"
+// import {RBot} from "./src/Rbot";
+import { enumCommand, FigletChalkStarter, Logger } from "./src/utils/logger";
+import { MongoConnect } from "./src/lib/MongoConnect";
+// import * as Schema from "./src/Models";
+// import {Message} from "./src/MessageHandler";
+import { RedisStore } from "./src/lib/Redis";
+// import {RMessage} from "./src/type";
 
-async function Start(){
-    try {
-        await MongoConnect(String(process.env.MONGO_URI))
+async function Start() {
+	try {
+		FigletChalkStarter("RBOT");
 
-        const rbot = new RBot(Schema.Group, Schema.User, Schema.Session);
-        rbot.logger.level = "warn";
+		await MongoConnect(String(process.env.MONGO_URI));
 
-        // Find existing session
-        const existSession = await rbot.getSession(process.env.SESSION_ID || "R-Bot");
-        if(existSession) rbot.loadAuthInfo(existSession);
+		new RedisStore();
 
-        rbot.on("open", () => {
-            rbot.updateSession(process.env.SESSION_ID || "R-Bot");
-            rbot.writeFileSession();
-        })
-
-        await rbot.connect()
-
-    }catch (e) {
-        Logger.error(`Error ${e}`)
-        // process.abort();
-    }
+		RBot();
+	} catch (e) {
+		Logger.error(`Error ${e}`);
+		process.exit();
+	}
 }
 
-Start().then(()=>{
-    Logger.bot("Ready for use");
-}).catch(e => {
-    console.log(e)
-});
+Start().then(() => {});
 
-/**
- * Init DB (Mongo)
- * Init Redis
- * Init WA Client
- */
-
+// /**
+//  * Init DB (Mongo)
+//  * Init Redis
+//  * Init WA Client
+//  */

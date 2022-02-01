@@ -1,5 +1,12 @@
-import { Schema, model } from 'mongoose'
-import { IUserModel } from '../type/mongo'
+import { Schema, model, Document } from 'mongoose'
+import {RegistDetails} from "../type";
+
+export type UserData = {
+    jid: string
+    isBanned: boolean
+    isRegistered: boolean
+    dataRegist: RegistDetails | false
+}
 
 const UserSchema = new Schema({
     jid: {
@@ -7,15 +14,19 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
-    ban: {
+    isBanned: {
         type: Boolean,
         required: true,
         default: false
     },
-    warnings: {
-        type: Number,
+    isRegistered: {
+        type: Boolean,
         required: true,
-        default: 0
+        default: false
+    },
+    dataRegist:{
+        type: Object || Boolean,
+        default: false
     }
 })
-export const User = model<IUserModel>('users', UserSchema)
+export const UserModels = model<UserData>('users', UserSchema)

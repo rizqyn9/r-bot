@@ -3,7 +3,7 @@ import { IUserModel } from './Mongo'
 
 export interface IConfig {
     name: string
-    prefix: string
+    prefix: string[]
     admins: string[]
 }
 

@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  mongodb_container:
+    container_name: mongo_rbot
+    image: mongo:5.0.5
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/docker-data/mongo:/data/dbe
+  redis_container:
+    container_name: redis_rbot
+    image: redis:6.2.5-alpine3.14
+    ports:
+      - 6379:6379
+    volumes:
+      - ~/docker-data/redis:/data

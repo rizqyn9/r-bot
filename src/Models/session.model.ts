@@ -1,5 +1,17 @@
 import { Schema, model } from 'mongoose'
-import { ISessionModel } from "../type/mongo"
+
+export interface SessionParse {
+    clientID: string
+    serverToken: string
+    clientToken: string
+    encKey: string
+    macKey: string
+}
+
+export type SessionData = {
+    ID: string,
+    session: SessionParse
+}
 
 const SessionSchema = new Schema({
     ID: {
@@ -14,4 +26,4 @@ const SessionSchema = new Schema({
     }
 })
 
-export const Session = model<ISessionModel>('session', SessionSchema)
+export const SessionModels = model<SessionData>('session', SessionSchema)

@@ -1,9 +1,15 @@
 node_modules
 dist
 sessions
+.idea/
+.vscode/
 
 .DS_Store
 .env
+rbot_session.json
+
+
+
 
 
 
