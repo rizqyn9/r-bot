@@ -1,4 +1,4 @@
-export type InputRegister = {
-    name: string
-    address: string
-}
+declare type InputRegister = {
+	name: string;
+	address: string;
+};
