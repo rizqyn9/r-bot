@@ -37,7 +37,7 @@ function StartRBot(): WASocket {
 		});
 
 		rBot.ev.on("messages.update", (data) => {
-			console.log("msgupdt", data);
+			// console.log("msgupdt", data);
 		});
 
 		rBot.ev.on("creds.update", saveState);

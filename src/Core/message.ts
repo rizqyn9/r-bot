@@ -10,24 +10,33 @@ export async function messageHandler(msg: WAMessage, rbot: WASocket) {
 			Redis.flushAll();
 		}
 	}
-	messageParser(msg);
-	// let parseMsg: RMessage;
-	// parseMsg = { ...msg, userData: await getAuth(msg, rbot) };
+	let RMsg = await messageParser(msg);
 
-	// console.log(parseMsg);
-}
-
-function messageParser(msg: WAMessage): RMessage {
-	let prefix: Prefix | null;
-	if (msg.message?.conversation) {
-		getPrefix(msg.message?.conversation);
-	} else if (msg.message?.imageMessage) {
+	if (RMsg.prefix && RMsg.prefix.cmd1 == "test") {
+		rbot.sendMessage(msg.key.remoteJid!, { text: JSON.stringify(RMsg) });
 	}
-	return { ...msg };
 }
 
-function getPrefix(msg: string): Prefix | null {
-	console.log(msg);
+async function messageParser(msg: WAMessage): Promise<RMessage> {
+	let auth = await getAuth(msg);
+	let prefix = getPrefix(
+		msg.message?.conversation || msg.message?.imageMessage?.caption || "",
+	);
+	if (!prefix) console.log(msg);
+	return { ...msg, prefix, auth };
+}
 
-	return null;
+function getPrefix(msg: string, prefix: string = "#"): Prefix | false {
+	if (msg.indexOf(prefix) >= 0) {
+		let cmd = msg
+			.slice(msg.indexOf(prefix) + 1)
+			.split(" ", 4)
+			.filter((res) => res);
+
+		return {
+			prefix,
+			cmd1: cmd[0],
+			cmd2: cmd[1],
+		};
+	} else return false;
 }

@@ -15,7 +15,7 @@ import * as Redis from "./redis-store";
  */
 export async function getAuth(
 	msg: WAMessage,
-	rbot: WASocket,
+	rbot?: WASocket,
 ): Promise<UserData | null> {
 	let user: UserData | null;
 	let msgId = msg.key.remoteJid!;
