@@ -1,8 +1,12 @@
-import { UserData, UserModels } from "../models";
+import { GroupData, GroupModels, UserData, UserModels } from "../models";
 import { Logger } from "../utils/logger";
 
-export async function getData(jid: string): Promise<null | object> {
-	return await UserModels.findOne({ jid }).then((data) => data);
+export async function getData(
+	jid: string,
+	isGroup: boolean = false,
+): Promise<null | object> {
+	if (isGroup) return await GroupModels.findOne({ jid }).then((data) => data);
+	else return await UserModels.findOne({ jid }).then((data) => data);
 }
 
 export const registUser = {
@@ -24,6 +28,39 @@ export const registUser = {
 			(result) => {
 				if (result) {
 					Logger.custom(`Success created auth user ${result}`, "[MONGO]", 183);
+					return result;
+				} else {
+					handleError("Fail created new auth user", data);
+					return null;
+				}
+			},
+		);
+	},
+};
+
+export const registGroup = {
+	guest: async (data: Partial<GroupData>): Promise<GroupData | null> => {
+		return await GroupModels.create({ ...data, isRegistered: false }).then(
+			(result) => {
+				if (result) {
+					Logger.custom(
+						`Success created guest group ${result}`,
+						"[MONGO]",
+						183,
+					);
+					return result;
+				} else {
+					handleError("Fail created new guest user", data);
+					return null;
+				}
+			},
+		);
+	},
+	auth: async (data: Partial<UserData>): Promise<GroupData | null> => {
+		return await GroupModels.create({ ...data, isRegistered: true }).then(
+			(result) => {
+				if (result) {
+					Logger.custom(`Success created auth group ${result}`, "[MONGO]", 183);
 					return result;
 				} else {
 					handleError("Fail created new auth user", data);

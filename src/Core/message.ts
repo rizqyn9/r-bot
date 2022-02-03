@@ -18,7 +18,10 @@ export async function messageHandler(msg: WAMessage, rbot: WASocket) {
 }
 
 async function messageParser(msg: WAMessage): Promise<RMessage> {
-	let auth = await getAuth(msg);
+	let isGroup = Boolean(msg.key.participant);
+	console.log(isGroup);
+
+	let auth = isGroup ? await getAuth.group(msg) : await getAuth.user(msg);
 	let prefix = getPrefix(
 		msg.message?.conversation || msg.message?.imageMessage?.caption || "",
 	);

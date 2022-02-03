@@ -1,5 +1,5 @@
 import { MessageType, WAGroupMetadata, WAMessage } from "@adiwajshing/baileys";
-import { UserData } from "../models";
+import { GroupData, UserData } from "../models";
 
 export type ParseMsg = SimpleMsg & WAMessage;
 
@@ -21,8 +21,9 @@ export interface IValidMessage extends IValidatedMsg, WAMessage {}
 
 export type RMessage = WAMessage & {
 	userData?: UserData | null;
+	groupData?: GroupData | null;
 	prefix?: Prefix | false;
-	auth?: UserData | null;
+	auth?: UserData | GroupData | null;
 };
 
 export type RQuotedMessage = {};
