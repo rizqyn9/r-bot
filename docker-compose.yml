@@ -9,7 +9,7 @@ services:
       - ~/docker-data/mongo:/data/dbe
   redis_container:
     container_name: redis_rbot
-    image: redis:6.2.5-alpine3.14
+    image: redislabs/rejson:2.0.6
     ports:
       - 6379:6379
     volumes:

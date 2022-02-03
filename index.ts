@@ -8,6 +8,7 @@ async function Start() {
 	try {
 		FigletChalkStarter("RBOT");
 
+		await RedisClient.connect();
 		await MongoConnect(String(process.env.MONGO_URI));
 
 		StartRBot();

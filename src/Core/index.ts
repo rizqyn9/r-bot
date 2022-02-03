@@ -61,5 +61,5 @@ function StartRBot(): WASocket {
 }
 
 export { StartRBot };
-export * from "./redis-store";
-export * from "./mongo-store";
+export * as RedisStore from "./redis-store";
+export * as MongoStore from "./mongo-store";

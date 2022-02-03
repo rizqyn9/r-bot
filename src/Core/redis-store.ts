@@ -1,5 +1,5 @@
 import { RedisClient } from "../lib";
-import { enumCommand, Logger } from "../utils/logger";
+import { Logger } from "../utils/logger";
 
 export async function checkExistingKey(
 	key: string,
@@ -8,10 +8,21 @@ export async function checkExistingKey(
 	return await RedisClient.exists(key).then((val) => Boolean(val));
 }
 
-export async function setData(
-	key: string,
-	data: { [key: string]: any },
-): Promise<boolean> {
-	Logger.redisDone(`Collect data ${key}`);
-	return await RedisClient.hmset(key, data).then((val) => Boolean(val));
+export async function setData(key: string, data: { [key: string]: any }) {
+	return await RedisClient.json.set(key, "$", data).then((val) => {
+		Logger.redisDone(`Collect data ${key} : ${val}`);
+		RedisClient.expire(key, Number(process.env.REDIS_EXPIRES_SECONDS) || 1000);
+		return val;
+	});
+}
+
+export async function getData<T>(key: string) {
+	return await RedisClient.json.get(key).then((value) => {
+		Logger.redisDone(`Get data ${key} :\n${JSON.stringify(value)}`);
+		return value;
+	});
+}
+
+export async function flushAll() {
+	await RedisClient.flushAll().then(() => console.log("Flush redis"));
 }
