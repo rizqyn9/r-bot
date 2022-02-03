@@ -1,56 +1,33 @@
 import type { WAMessage, WASocket } from "@adiwajshing/baileys";
-import { UserData } from "../Models";
-import * as Mongo from "./mongo-store";
+import type { Prefix, RMessage } from "../type";
 import * as Redis from "./redis-store";
+import { getAuth } from "./authentication";
 
-export function messageHandler(msg: WAMessage, rbot: WASocket) {
+export async function messageHandler(msg: WAMessage, rbot: WASocket) {
 	if (msg.key.fromMe) return;
 	if (msg.message?.conversation) {
 		if (msg.message.conversation.includes("flush")) {
 			Redis.flushAll();
 		}
 	}
-	getAuth(msg, rbot);
+	messageParser(msg);
+	// let parseMsg: RMessage;
+	// parseMsg = { ...msg, userData: await getAuth(msg, rbot) };
+
+	// console.log(parseMsg);
 }
 
-async function getAuth(msg: WAMessage, rbot: WASocket) {
-	try {
-		let user: UserData | null;
-		let msgId = msg.key.remoteJid!;
+function messageParser(msg: WAMessage): RMessage {
+	let prefix: Prefix | null;
+	if (msg.message?.conversation) {
+		getPrefix(msg.message?.conversation);
+	} else if (msg.message?.imageMessage) {
+	}
+	return { ...msg };
+}
 
-		/**
-		 * * AUTHENTICATION *
-		 * Check Redis
-		 * (true) return data
-		 * (false) find in mongo store
-		 * 		(true) return the data and set to redis
-		 * 		(false) regist the data
-		 * 				(true) return the data and set to redis
-		 * 				(false) skipped this conversation
-		 */
+function getPrefix(msg: string): Prefix | null {
+	console.log(msg);
 
-		if (await Redis.checkExistingKey(msgId)) {
-			user = (await Redis.getData(msgId)) as UserData;
-		} else {
-			await Mongo.getData(msgId).then(async (result) => {
-				if (result) {
-					user = result as UserData;
-
-					await Redis.setData(msgId, result);
-				} else {
-					await Mongo.registUser
-						.guest({
-							jid: msg.key.remoteJid!,
-							pushName: msg.pushName || "User Not Set",
-						})
-						.then((val) => {
-							user = val;
-							Redis.setData(msg.key.remoteJid!, val!);
-						});
-				}
-			});
-		}
-
-		console.log(user!);
-	} catch (error) {}
+	return null;
 }
