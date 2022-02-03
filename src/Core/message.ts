@@ -13,15 +13,13 @@ export function messageHandler(msg: WAMessage, rbot: WASocket) {
 	getAuth(msg, rbot);
 }
 
-/**
- *
- */
 async function getAuth(msg: WAMessage, rbot: WASocket) {
 	try {
 		let user: UserData | null;
 		let msgId = msg.key.remoteJid!;
 
 		/**
+		 * * AUTHENTICATION *
 		 * Check Redis
 		 * (true) return data
 		 * (false) find in mongo store

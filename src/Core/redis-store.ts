@@ -24,5 +24,7 @@ export async function getData<T>(key: string) {
 }
 
 export async function flushAll() {
-	await RedisClient.flushAll().then(() => console.log("Flush redis"));
+	await RedisClient.flushAll().then(() => {
+		Logger.redisDone(`Flush all`);
+	});
 }
