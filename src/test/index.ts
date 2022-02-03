@@ -1,5 +1,6 @@
 let test = "# dasd asdasd";
-import type { Prefix } from "../src/type";
+import type { Prefix } from "../type";
+import { getNumber } from "../utils";
 
 const prefix = (msg: string, prefix = "#"): any => {
 	let parse = msg.trim().toLowerCase();
@@ -14,4 +15,8 @@ const prefix = (msg: string, prefix = "#"): any => {
 	};
 };
 
-console.log(prefix(test));
+// console.log(prefix(test));
+
+let examp1 = "628985665498@s.whatsapp.net";
+
+console.log(getNumber(examp1));

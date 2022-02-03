@@ -7,7 +7,7 @@
     "build": "tsc -p .",
     "production": "node dist",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",
-    "test": "nodemon --watch './**/*.ts' --exec 'ts-node' ./test/index.ts"
+    "test": "nodemon --watch './**/*.ts' --exec 'ts-node' ./src/test/index.ts"
   },
   "author": "rizqyn9 <54632504+rizqyn9@users.noreply.github.com>",
   "license": "MIT",
