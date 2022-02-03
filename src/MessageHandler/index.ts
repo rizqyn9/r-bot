@@ -1,2 +1,2 @@
-export * from "./Message"
-export { data2 } from "./Test"
+export * from "./message";
+export { data2 } from "./test";

@@ -1,5 +1,5 @@
 import type { WAMessage, WASocket } from "@adiwajshing/baileys";
-import { UserData } from "../Models";
+import { UserData } from "../models";
 import * as Mongo from "./mongo-store";
 import * as Redis from "./redis-store";
 

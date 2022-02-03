@@ -1,5 +1,5 @@
 import { MessageType, WAGroupMetadata, WAMessage } from "@adiwajshing/baileys";
-import { UserData } from "../Models";
+import { UserData } from "../models";
 
 export type ParseMsg = SimpleMsg & WAMessage;
 

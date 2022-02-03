@@ -1,4 +1,4 @@
-import { UserData, UserModels } from "../Models";
+import { UserData, UserModels } from "../models";
 import { Logger } from "../utils/logger";
 
 export async function getData(jid: string): Promise<null | object> {
