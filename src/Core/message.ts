@@ -14,6 +14,7 @@ export async function messageHandler(WAmsg: WAMessage, rbot: WASocket) {
 	let msg: RMessage = await messageParser(WAmsg);
 
 	await Message.messageRouter(msg, rbot);
+
 	if (msg.auth && !msg.auth.isRegistered) {
 		Message.authentication(msg, rbot);
 	}

@@ -1,9 +1,16 @@
 import type { WASocket } from "@adiwajshing/baileys";
 import type { RMessage } from "../type";
 import * as Utils from "../utils";
+import * as Mongo from "../core/mongo-store";
+import * as Redis from "../core/redis-store";
 
-export function authentication(msg: RMessage, rbot: WASocket): any {
-	if (msg.userData?.isRegistered || msg.groupData?.isRegistered) {
+export async function authentication(
+	msg: RMessage,
+	rbot: WASocket,
+): Promise<any> {
+	console.log(msg);
+
+	if (msg.auth?.isRegistered) {
 		return rbot.sendMessage(msg.jid, {
 			text: `${msg.isGroup ? "Group" : "User"} already registered`,
 		});
@@ -15,9 +22,19 @@ export function authentication(msg: RMessage, rbot: WASocket): any {
 				text: "Example: #daftar <Nama> | <Asal>",
 			});
 		} else {
-			return rbot.sendMessage(msg.jid, {
-				text: "Saved auth",
-			});
+			return await Mongo.group
+				.update(msg.jid, {
+					groupName: parse[0],
+					isRegistered: true,
+				})
+				.then(async (val) => {
+					if (val) {
+						await Redis.setData(msg.jid, val);
+						return rbot.sendMessage(msg.jid, {
+							text: JSON.stringify(val),
+						});
+					}
+				});
 		}
 	}
 }

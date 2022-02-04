@@ -9,6 +9,14 @@ export async function getData(
 	else return await UserModels.findOne({ jid }).then((data) => data);
 }
 
+export const group = {
+	update: async (jid: string, data: Partial<GroupData>) => {
+		return await GroupModels.findOneAndUpdate({ jid }, { ...data }).then(
+			(result) => result,
+		);
+	},
+};
+
 export const registUser = {
 	guest: async (data: Partial<UserData>): Promise<UserData | null> => {
 		return await UserModels.create({ ...data, isRegistered: false }).then(
