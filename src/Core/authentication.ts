@@ -72,7 +72,8 @@ export const getAuth = {
 			}
 			return group!;
 		} catch (error) {
-			throw new Error(error as any);
+			console.log(error);
+			return null;
 		}
 	},
 };

@@ -15,11 +15,15 @@ export type Prefix = {
 	prefix: string | false;
 	cmd1: string;
 	cmd2?: string;
+	text?: string;
+	any: any;
 };
 
 export interface IValidMessage extends IValidatedMsg, WAMessage {}
 
 export type RMessage = WAMessage & {
+	jid: string;
+	isGroup: boolean;
 	userData?: UserData | null;
 	groupData?: GroupData | null;
 	prefix?: Prefix | false;

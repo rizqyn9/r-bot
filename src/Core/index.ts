@@ -10,26 +10,29 @@ import { messageHandler } from "./message";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
-function StartRBot(): WASocket {
+async function StartRBot(): Promise<WASocket> {
 	try {
-		const rBot = makeWASocket({
+		const rBot = await makeWASocket({
 			printQRInTerminal: true,
 			logger: P({ level: "silent" }),
 			auth: state,
 		});
 
-		rBot.ev.on("connection.update", (update) => {
+		rBot.ev.on("connection.update", async (update) => {
 			const { connection, lastDisconnect } = update;
 			Logger.bot(
 				`Connection ${update.connection}, last disconnect ${update.lastDisconnect}`,
 			);
 			if (connection === "close") {
+				console.log(connection);
+
 				// reconnect if not logged out
 				if (
 					(lastDisconnect?.error as Boom)?.output?.statusCode !==
 					DisconnectReason.loggedOut
 				) {
-					StartRBot();
+					Logger.error(`Restart`);
+					await StartRBot();
 				} else {
 					Logger.error("Connection closed");
 				}

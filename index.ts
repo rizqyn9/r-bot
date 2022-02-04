@@ -1,3 +1,4 @@
+import process from "process";
 import { config } from "dotenv";
 config();
 import { MongoConnect, RedisClient } from "./src/lib";
@@ -25,3 +26,7 @@ Start().then(() => {});
 //  * Init Redis
 //  * Init WA Client
 //  */
+
+process.on("exit", (code) => {
+	console.log(`About to exit with code: ${code}`);
+});

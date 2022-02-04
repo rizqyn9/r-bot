@@ -1,22 +1,36 @@
 let test = "# dasd asdasd";
+let testSignUp = "#daftar test asdahd | asdasd";
 import type { Prefix } from "../type";
 import { getNumber } from "../utils";
 
-const prefix = (msg: string, prefix = "#"): any => {
-	let parse = msg.trim().toLowerCase();
-	let cmd = msg
-		.slice(msg.indexOf(prefix) + 1)
-		.split(" ", 4)
-		.filter((res) => res);
+function getPrefix(msg: string, prefix: string = "#"): Prefix | false {
+	if (msg.indexOf(prefix) >= 0) {
+		let noPrefix = msg.slice(msg.indexOf(prefix) + 1);
+		let cmd = noPrefix.trim().split(" ", 4);
 
-	return {
-		cmd1: cmd,
-		cmd2: msg.indexOf("#"),
-	};
-};
+		return {
+			prefix,
+			cmd1: cmd[0],
+			cmd2: cmd[1],
+			text: noPrefix.trim(),
+			any: cmd,
+		};
+	} else return false;
+}
 
-// console.log(prefix(test));
+function parseSignUp(msg: string) {
+	let prefix = getPrefix(msg);
+	console.log(prefix);
+	if (prefix) {
+		return prefix.text
+			?.replace(prefix.cmd1, "")
+			.trim()
+			.split("|")
+			.map((val) => val.trim());
+	}
+}
+
+console.log(parseSignUp(testSignUp));
 
 let examp1 = "628985665498@s.whatsapp.net";
-
 console.log(getNumber(examp1));
