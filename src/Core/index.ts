@@ -4,11 +4,10 @@ import makeWASocket, {
 } from "@adiwajshing/baileys";
 import { Boom } from "@hapi/boom";
 import P from "pino";
-import { Logger } from "../utils/logger";
+import { Logger } from "~/utils/logger";
 import { messageHandler } from "./message";
-import { RBotSocket, EnvProps } from "../types/index";
+import { RBotSocket, EnvProps } from "~/types";
 import { messageHelper } from "./message-helper";
-import { env } from "../../index";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 

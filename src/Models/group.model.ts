@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { RegistDetails } from "../types";
+import { RegistDetails } from "~/types";
 
 export type GroupData = {
   jid: string;

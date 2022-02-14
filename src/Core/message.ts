@@ -1,9 +1,9 @@
 import type { WAMessage, MessageUpdateType } from "@adiwajshing/baileys";
-import type { Prefix, RMessage } from "../types";
+import type { Prefix, RMessage } from "~/types";
 import * as Redis from "./redis-store";
 import { getAuth } from "./authentication";
-import * as Message from "../messageHandler";
-import { RBotSocket } from "../types/index";
+import * as Message from "~/messageHandler";
+import { RBotSocket } from "~/types/index";
 
 export async function messageHandler(
   WAmsg: WAMessage,

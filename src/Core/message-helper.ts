@@ -1,4 +1,4 @@
-import { Singleton } from "./index";
+import { Singleton } from ".";
 
 type MessageProps = { jid: string };
 

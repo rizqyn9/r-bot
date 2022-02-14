@@ -1,5 +1,5 @@
-import { Schema, model, Document } from "mongoose";
-import { RegistDetails } from "../types";
+import { Schema, model } from "mongoose";
+import { RegistDetails } from "~/types";
 
 export type UserData = {
   jid: string;
