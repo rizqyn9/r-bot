@@ -543,6 +543,13 @@ end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   dependencies:
     once "^1.4.0"
 
+envalid@^7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/envalid/-/envalid-7.2.2.tgz#f3219f85e692002dca0f28076740227d30c817e3"
+  integrity sha512-bl/3VF5PhoF26HlDWiE0NRRHUbKT/+UDP/+0JtOFmhUwK3cUPS7JgWYGbE8ArvA61T+SyNquxscLCS6y4Wnpdw==
+  dependencies:
+    tslib "2.3.1"
+
 escape-goat@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/escape-goat/-/escape-goat-2.1.1.tgz#1b2dc77003676c457ec760b2dc68edb648188675"
@@ -835,9 +842,9 @@ latest-version@^5.1.0:
   dependencies:
     package-json "^6.3.0"
 
-"libsignal@git+https://github.com/adiwajshing/libsignal-node.git":
+"libsignal@git+https://github.com/adiwajshing/libsignal-node":
   version "2.0.1"
-  resolved "git+https://github.com/adiwajshing/libsignal-node.git#4ffc1f3d6147ffdec88f62e70f41e7de2e08cd42"
+  resolved "git+https://github.com/adiwajshing/libsignal-node#4ffc1f3d6147ffdec88f62e70f41e7de2e08cd42"
   dependencies:
     curve25519-js "^0.0.4"
     protobufjs "6.8.8"
@@ -1487,6 +1494,11 @@ ts-node@^10.3.0:
     make-error "^1.1.1"
     v8-compile-cache-lib "^3.0.0"
     yn "3.1.1"
+
+tslib@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 type-fest@^0.20.2:
   version "0.20.2"

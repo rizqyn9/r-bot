@@ -6,12 +6,13 @@ import { Boom } from "@hapi/boom";
 import P from "pino";
 import { Logger } from "../utils/logger";
 import { messageHandler } from "./message";
-import { RBotSocket } from "../types/index";
+import { RBotSocket, EnvProps } from "../types/index";
 import { messageHelper } from "./message-helper";
+import { env } from "../../index";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
-async function StartRBot(): Promise<RBotSocket> {
+async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
   try {
     const rBot: RBotSocket = {
       ...(await makeWASocket({
@@ -20,6 +21,7 @@ async function StartRBot(): Promise<RBotSocket> {
         auth: state,
       })),
       messageHelper,
+      ENV: env,
     };
 
     Singleton.RBot = rBot;
@@ -38,7 +40,7 @@ async function StartRBot(): Promise<RBotSocket> {
           DisconnectReason.loggedOut
         ) {
           Logger.error(`Restart`);
-          await StartRBot();
+          await StartRBot({ env });
         } else {
           Logger.error("Connection closed");
         }
@@ -63,6 +65,8 @@ async function StartRBot(): Promise<RBotSocket> {
       messageHandler(data.messages[0], data.type, rBot);
     });
 
+    console.log(rBot);
+
     return rBot;
   } catch (error) {
     throw new Error("Failed to instance WA Socket");
@@ -71,6 +75,7 @@ async function StartRBot(): Promise<RBotSocket> {
 
 export namespace Singleton {
   export let RBot: RBotSocket;
+  export let ENV: EnvProps;
 }
 
 export { StartRBot };

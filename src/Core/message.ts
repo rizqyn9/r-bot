@@ -42,6 +42,22 @@ export async function messageHandler(
       console.log("Authentication Routes");
       return await Message.authentication(msg, rbot);
     }
+
+    if (msg.auth && msg.auth.isRegistered) {
+      if (msg.prefix && msg.prefix.cmd1 == "test") {
+        rbot.messageHelper.sendMessageInfo({
+          jid: msg.jid,
+          text: JSON.stringify(msg),
+        });
+      }
+    } else {
+      if (!msg.isGroup) {
+        return rbot.messageHelper.sendMessageError({
+          jid: msg.jid,
+          text: "you dont have authorization for this action",
+        });
+      }
+    }
   } catch (error) {
     console.log(error);
     if (error instanceof Error)
@@ -55,21 +71,6 @@ export async function messageHandler(
         text: `Unknown Error : ${JSON.stringify(error)}`,
       });
   }
-
-  // if (msg.auth && msg.auth.isRegistered) {
-  //   if (msg.prefix && msg.prefix.cmd1 == "test") {
-  //     rbot.messageHelper.sendMessageTxt({
-  //       jid: msg.jid,
-  //       text: JSON.stringify(msg),
-  //     });
-  //   }
-  // } else {
-  //   if (!msg.isGroup) {
-  //     return rbot.sendMessage(msg.jid, {
-  //       text: "you dont have authorization for this action",
-  //     });
-  //   }
-  // }
 }
 
 async function messageParser(msg: WAMessage): Promise<RMessage> {

@@ -4,15 +4,30 @@ config();
 import { MongoConnect, RedisClient } from "./src/lib";
 import { StartRBot } from "./src/Core";
 import { FigletChalkStarter, Logger } from "./src/utils/logger";
+import { cleanEnv, email, makeValidator, num, str } from "envalid";
+
+const ownerNumber = makeValidator((num) => {
+  if (num.split(" ").length > 0) return [...num.split(" ")];
+  else throw new Error("Owner ");
+});
+
+export const env = cleanEnv(process.env, {
+  NODE_ENV: str({ choices: ["development", "test", "production"] }),
+  MONGO_URI: str(),
+  EMAIL: email(),
+  SESSION_ID: str(),
+  REDIS_EXPIRES_SECONDS: num(),
+  OWNER_NUMBER: ownerNumber(),
+});
 
 async function Start() {
   try {
     FigletChalkStarter("RBOT");
 
     await RedisClient.connect();
-    await MongoConnect(String(process.env.MONGO_URI));
+    await MongoConnect(env.MONGO_URI);
 
-    StartRBot();
+    StartRBot({ env });
   } catch (e) {
     Logger.error(`Error ${e}`);
     process.exit();
