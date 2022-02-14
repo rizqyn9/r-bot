@@ -1,6 +1,6 @@
-import { RedisClient } from "~/libs";
+import { RedisClient } from "../libs";
 import * as Mongo from "./mongo-store";
-import { Logger } from "~/utils/logger";
+import { Logger } from "../utils/logger";
 
 export async function checkExistingKey(
   key: string,

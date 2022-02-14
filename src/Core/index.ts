@@ -4,10 +4,11 @@ import makeWASocket, {
 } from "@adiwajshing/baileys";
 import { Boom } from "@hapi/boom";
 import P from "pino";
-import { Logger } from "~/utils/logger";
+import { Logger } from "../utils/logger";
 import { messageHandler } from "./message";
-import { RBotSocket, EnvProps } from "~/types";
+import { RBotSocket, EnvProps } from "../types";
 import { messageHelper } from "./message-helper";
+import sizeOf from "object-sizeof";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
@@ -64,7 +65,7 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
       messageHandler(data.messages[0], data.type, rBot);
     });
 
-    console.log(rBot);
+    console.log(sizeOf(rBot));
 
     return rBot;
   } catch (error) {

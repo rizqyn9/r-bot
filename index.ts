@@ -1,9 +1,9 @@
 import process from "process";
 import { config } from "dotenv";
 config();
-import { MongoConnect, RedisClient } from "~/libs";
-import { StartRBot } from "~/core";
-import { FigletChalkStarter, Logger } from "~/utils/logger";
+import { MongoConnect, RedisClient } from "./src/libs";
+import { StartRBot } from "./src/core";
+import { FigletChalkStarter, Logger } from "./src/utils/logger";
 import { cleanEnv, email, makeValidator, num, str } from "envalid";
 
 const ownerNumber = makeValidator((num) => {

@@ -1,5 +1,5 @@
-import { GroupData, GroupModels, UserData, UserModels } from "~/models";
-import { Logger } from "~/utils/logger";
+import { GroupData, GroupModels, UserData, UserModels } from "../models";
+import { Logger } from "../utils/logger";
 
 export async function getData(
   jid: string,
