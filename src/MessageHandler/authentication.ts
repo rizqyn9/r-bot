@@ -1,46 +1,53 @@
-import type { WASocket } from "@adiwajshing/baileys";
-import type { RMessage, StructMessage, StructMessages } from "../type";
+import type { RMessage, StructMessages, RBotSocket } from "../types";
 import * as Utils from "../utils";
-import * as Mongo from "../core/mongo-store";
-import * as Redis from "../core/redis-store";
+import { MongoStore, RedisStore } from "../core";
 
 export async function authentication(
-	msg: RMessage,
-	rbot: WASocket,
+  msg: RMessage,
+  rbot: RBotSocket
 ): Promise<any> {
-	console.log(msg);
+  if (msg.auth?.isRegistered) {
+    return rbot.sendMessage(msg.jid, {
+      text: `${msg.pushName || "Unknown"} already registered`,
+    });
+  }
+  if (msg.prefix && msg.prefix.text) {
+    try {
+      let parse = Utils.parseSymbol(
+        msg.prefix.text.replace(msg.prefix.cmd1, "")
+      );
 
-	if (msg.auth?.isRegistered) {
-		return rbot.sendMessage(msg.jid, {
-			text: `${msg.isGroup ? "Group" : "User"} already registered`,
-		});
-	}
-	if (msg.prefix && msg.prefix.text) {
-		let parse = Utils.parseSymbol(msg.prefix.text.replace(msg.prefix.cmd1, ""));
-		if (parse.length < 2) {
-			return rbot.sendMessage(msg.jid, {
-				text: tmpMsg.reqAuthUser["id"],
-			});
-		} else {
-			return await Mongo.group
-				.update(msg.jid, {
-					groupName: parse[0],
-					isRegistered: true,
-				})
-				.then(async (val) => {
-					if (val) {
-						await Redis.setData(msg.jid, val);
-						return rbot.sendMessage(msg.jid, {
-							text: JSON.stringify(val),
-						});
-					}
-				});
-		}
-	}
+      if (parse.length < 2) {
+        throw new Error(`Example #Daftar asdad | asd`);
+      } else {
+        console.log("aasdasd", parse);
+        return await MongoStore.group
+          .update(msg.jid, {
+            groupName: parse[0],
+            isRegistered: true,
+          })
+          .then(async (val) => {
+            if (val) {
+              await RedisStore.setData(msg.jid, val);
+              return rbot.messageHelper.sendMessageSuccess({
+                jid: msg.jid,
+                text: `Success : ${JSON.stringify(val)}`,
+              });
+            } else throw new Error("Regist fail");
+          })
+          .catch((e) => {
+            throw new Error(e);
+          });
+      }
+    } catch (error) {
+      if (error instanceof Error) throw error;
+      else throw new Error(JSON.stringify(error));
+    }
+  }
 }
 
 const tmpMsg: StructMessages = {
-	reqAuthUser: {
-		id: "asdasd",
-	},
+  reqAuthUser: {
+    id: "asdasd",
+  },
 };
