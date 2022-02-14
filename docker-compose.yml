@@ -6,7 +6,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ~/docker-data/mongo:/data/dbe
+      - ~/docker-data/mongo:/data/db
   redis_container:
     container_name: redis_rbot
     image: redislabs/rejson:2.0.6

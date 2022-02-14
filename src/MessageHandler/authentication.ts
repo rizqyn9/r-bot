@@ -1,5 +1,5 @@
 import type { WASocket } from "@adiwajshing/baileys";
-import type { RMessage } from "../type";
+import type { RMessage, StructMessage, StructMessages } from "../type";
 import * as Utils from "../utils";
 import * as Mongo from "../core/mongo-store";
 import * as Redis from "../core/redis-store";
@@ -19,7 +19,7 @@ export async function authentication(
 		let parse = Utils.parseSymbol(msg.prefix.text.replace(msg.prefix.cmd1, ""));
 		if (parse.length < 2) {
 			return rbot.sendMessage(msg.jid, {
-				text: "Example: #daftar <Nama> | <Asal>",
+				text: tmpMsg.reqAuthUser["id"],
 			});
 		} else {
 			return await Mongo.group
@@ -38,3 +38,9 @@ export async function authentication(
 		}
 	}
 }
+
+const tmpMsg: StructMessages = {
+	reqAuthUser: {
+		id: "asdasd",
+	},
+};

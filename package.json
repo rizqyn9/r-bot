@@ -4,6 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/rizqyn9/r-bot.git",
   "scripts": {
+    "setup": "docker-compose up -d",
+    "clean": "rm -rf ./dist",
     "build": "tsc -p .",
     "production": "node dist",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",

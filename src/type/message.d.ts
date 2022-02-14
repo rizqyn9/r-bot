@@ -35,3 +35,8 @@ export type RQuotedMessage = {};
 export interface RGroupMetaData extends WAGroupMetadata {
 	admins?: string[];
 }
+
+// Response Message Template
+export type Lang = "id" | "en";
+export type StructMessage = { [key in Lang]?: any };
+export type StructMessages = { [key: string]: StructMessage };
