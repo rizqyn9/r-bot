@@ -12,6 +12,9 @@ export const messageHelper = {
   sendMessageError(props: MessageProps & { text: string }) {
     Singleton.RBot.sendMessage(props.jid, { text: `❌ ${props.text}` });
   },
+  sendMessageInfo(props: MessageProps & { text: string }) {
+    Singleton.RBot.sendMessage(props.jid, { text: `ℹ ${props.text}` });
+  },
 };
 
 export type MessageHelper = typeof messageHelper;

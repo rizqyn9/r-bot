@@ -7,7 +7,8 @@ export async function authentication(
   rbot: RBotSocket
 ): Promise<any> {
   if (msg.auth?.isRegistered) {
-    return rbot.sendMessage(msg.jid, {
+    return rbot.messageHelper.sendMessageError({
+      jid: msg.jid,
       text: `${msg.pushName || "Unknown"} already registered`,
     });
   }
@@ -20,24 +21,9 @@ export async function authentication(
       if (parse.length < 2) {
         throw new Error(`Example #Daftar asdad | asd`);
       } else {
-        console.log("aasdasd", parse);
-        return await MongoStore.group
-          .update(msg.jid, {
-            groupName: parse[0],
-            isRegistered: true,
-          })
-          .then(async (val) => {
-            if (val) {
-              await RedisStore.setData(msg.jid, val);
-              return rbot.messageHelper.sendMessageSuccess({
-                jid: msg.jid,
-                text: `Success : ${JSON.stringify(val)}`,
-              });
-            } else throw new Error("Regist fail");
-          })
-          .catch((e) => {
-            throw new Error(e);
-          });
+        return msg.isGroup
+          ? await authGroup(msg, parse, rbot)
+          : await authUser(msg, parse, rbot);
       }
     } catch (error) {
       if (error instanceof Error) throw error;
@@ -46,8 +32,42 @@ export async function authentication(
   }
 }
 
-const tmpMsg: StructMessages = {
-  reqAuthUser: {
-    id: "asdasd",
-  },
-};
+async function authGroup(msg: RMessage, parse: string[], rbot: RBotSocket) {
+  await MongoStore.group
+    .update(msg.jid, {
+      groupName: parse[0],
+      isRegistered: true,
+    })
+    .then(async (val) => {
+      if (val) {
+        await RedisStore.setData(msg.jid, val);
+        return rbot.messageHelper.sendMessageSuccess({
+          jid: msg.jid,
+          text: `Success : ${JSON.stringify(val)}`,
+        });
+      } else throw new Error("Group regist fail");
+    })
+    .catch((e) => {
+      throw new Error(e);
+    });
+}
+
+async function authUser(msg: RMessage, parse: string[], rbot: RBotSocket) {
+  await MongoStore.user
+    .update(msg.jid, {
+      pushName: parse[0],
+      isRegistered: true,
+    })
+    .then(async (val) => {
+      if (val) {
+        await RedisStore.setData(msg.jid, val);
+        return rbot.messageHelper.sendMessageSuccess({
+          jid: msg.jid,
+          text: `Success : ${JSON.stringify(val)}`,
+        });
+      } else throw new Error("User regist fail");
+    })
+    .catch((e) => {
+      throw new Error(e);
+    });
+}
