@@ -22,6 +22,8 @@ async function StartRBot(): Promise<RBotSocket> {
       messageHelper,
     };
 
+    Singleton.RBot = rBot;
+
     rBot.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect } = update;
       Logger.bot(
@@ -58,13 +60,17 @@ async function StartRBot(): Promise<RBotSocket> {
     });
 
     rBot.ev.on("messages.upsert", (data) => {
-      messageHandler(data.messages[0], rBot);
+      messageHandler(data.messages[0], data.type, rBot);
     });
 
     return rBot;
   } catch (error) {
     throw new Error("Failed to instance WA Socket");
   }
+}
+
+export namespace Singleton {
+  export let RBot: RBotSocket;
 }
 
 export { StartRBot };
