@@ -1,8 +1,17 @@
-import type {
-  UserData,
-  GroupData,
-  SessionParse,
-  SessionModels,
-} from "~/models";
+declare type UserProps = {
+  jid: string;
+  pushName: string;
+  region: string;
+  authProps: AuthProps;
+  customCommands?: CustomCommadsProps;
+};
 
-export { UserData, GroupData, SessionModels, SessionParse };
+declare type GroupProps = {
+  jid: string;
+  pushName: string;
+  region: string;
+  // Aray of jid
+  participants: string[];
+  authProps: AuthProps;
+  customCommands?: CustomCommadsProps;
+};

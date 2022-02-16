@@ -1,44 +1,28 @@
 import { model, Schema } from "mongoose";
-import { RegistDetails } from "../types";
 
-export type GroupData = {
-  jid: string;
-  address: string;
-  groupName: string;
-  isBanned: boolean;
-  isRegistered: boolean;
-  groupMember: string[];
-  dataRegist: RegistDetails | false;
-};
-
-const GroupSchema = new Schema({
+const GroupSchema = new Schema<GroupProps>({
   jid: {
     type: String,
     required: true,
     unique: true,
   },
-  address: {
-    type: String,
-  },
-  groupName: {
+  pushName: {
     type: String,
     required: true,
   },
-  isBanned: {
-    type: Boolean,
-    default: false,
+  region: {
+    type: String,
   },
-  isRegistered: {
-    type: Boolean,
-    default: false,
+  participants: {
+    type: [String],
   },
-  groupMember: {
-    type: Array,
+  authProps: {
+    type: Object,
   },
-  dataRegist: {
-    type: Object || Boolean,
-    default: false,
+  customCommands: {
+    type: Object,
+    default: undefined,
   },
 });
 
-export const GroupModels = model<GroupData>("groups", GroupSchema);
+export const GroupModels = model<GroupProps>("groups", GroupSchema);

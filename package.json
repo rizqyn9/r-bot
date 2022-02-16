@@ -6,6 +6,7 @@
   "scripts": {
     "setup": "docker-compose up -d",
     "clean": "rm -rf ./dist",
+    "clean:session": "rm -rf ./sessions *session.json",
     "build": "tsc -p .",
     "production": "node dist",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",

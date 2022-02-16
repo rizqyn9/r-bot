@@ -1,41 +1,25 @@
 import { Schema, model } from "mongoose";
-import { RegistDetails } from "../types";
 
-export type UserData = {
-  jid: string;
-  isBanned: boolean;
-  isRegistered: boolean;
-  dataRegist: RegistDetails | false;
-  pushName: string;
-};
-
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserProps>({
   jid: {
     type: String,
     required: true,
     unique: true,
   },
-  isBanned: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  isRegistered: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  dataRegist: {
-    type: Object || Boolean,
-    default: false,
-  },
   pushName: {
     type: String,
+    required: true,
   },
-  created_at: {
-    type: Date,
-    default: Date.now(),
+  region: {
+    type: String,
+  },
+  authProps: {
+    type: Object,
+  },
+  customCommands: {
+    type: Object,
+    default: undefined,
   },
 });
 
-export const UserModels = model<UserData>("users", UserSchema);
+export const UserModels = model<UserProps>("users", UserSchema);

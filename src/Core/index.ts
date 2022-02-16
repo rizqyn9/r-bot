@@ -6,9 +6,11 @@ import { Boom } from "@hapi/boom";
 import P from "pino";
 import { Logger } from "../utils/logger";
 import { messageHandler } from "./message";
+import { getAuth } from "./authorization";
 import { RBotSocket, EnvProps } from "../types";
 import { messageHelper } from "./message-helper";
 import sizeOf from "object-sizeof";
+import { getNumber } from "../utils/index";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
@@ -22,6 +24,7 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
       })),
       messageHelper,
       ENV: env,
+      authorization: { getAuth },
     };
 
     Singleton.RBot = rBot;
@@ -64,8 +67,6 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
     rBot.ev.on("messages.upsert", (data) => {
       messageHandler(data.messages[0], data.type, rBot);
     });
-
-    console.log(sizeOf(rBot));
 
     return rBot;
   } catch (error) {
