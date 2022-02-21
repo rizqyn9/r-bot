@@ -4,13 +4,17 @@ import makeWASocket, {
 } from "@adiwajshing/baileys";
 import { Boom } from "@hapi/boom";
 import P from "pino";
-import { Logger } from "../utils/logger";
 import { messageHandler } from "./message";
-import { Authorization as AuthorizationUtils } from "./authorization";
 import { RBotSocket, EnvProps } from "../types";
-import { messageHelper } from "./message-helper";
 import sizeOf from "object-sizeof";
 import { getNumber } from "../utils/index";
+
+/**
+ * Register Helper
+ */
+import { Authorization as AuthorizationHelper } from "./authorization";
+import { Logger as LoggerHelper } from "../utils/logger";
+import { messageHelper as MessageHelper } from "./message-helper";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
@@ -24,16 +28,17 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
         version: [2, 2204, 13],
         browser: ["Rdev", "RDev", "RDev"],
       })),
-      messageHelper,
       ENV: env,
-      authorization: AuthorizationUtils,
+      messageHelper: MessageHelper,
+      authorization: AuthorizationHelper,
+      logger: LoggerHelper,
     };
 
     Singleton.RBot = rBot;
 
     rBot.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect } = update;
-      Logger.bot(
+      rBot.logger.bot(
         `Connection ${update.connection}, last disconnect ${JSON.stringify(
           update.lastDisconnect
         )}`
@@ -44,10 +49,10 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
           (lastDisconnect?.error as Boom)?.output?.statusCode !==
           DisconnectReason.loggedOut
         ) {
-          Logger.error(`Restart`);
+          rBot.logger.error(`Restart`);
           await StartRBot({ env });
         } else {
-          Logger.error("Connection closed");
+          rBot.logger.error("Connection closed");
         }
       }
     });
