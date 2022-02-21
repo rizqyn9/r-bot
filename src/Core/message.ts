@@ -34,14 +34,11 @@ export async function messageHandler(
      * Parse message
      */
     let msg: RMessage = await messageParser(WAmsg, rbot);
-    console.log(msg);
 
+    console.log(msg);
     await Message.messageRouter(msg, rbot);
 
-    if (
-      msg.auth
-      // rbot.authorization.compareAuthorization(msg.auth, ["owner"])
-    ) {
+    if (rbot.authorization.isAllowed(msg.auth, ["GUEST", "ADMIN_BOT"])) {
       if (msg.prefix && msg.prefix.cmd1 == "test") {
         rbot.messageHelper.sendMessageInfo({
           jid: msg.jid,
@@ -52,7 +49,7 @@ export async function messageHandler(
       if (!msg.isGroup) {
         return rbot.messageHelper.sendMessageError({
           jid: msg.jid,
-          text: "you dont have authorization for this action",
+          text: "You dont have authorization to perform this action",
         });
       }
     }
@@ -71,6 +68,7 @@ export async function messageHandler(
   }
 }
 
+// Problem in message Parser
 async function messageParser(
   msg: WAMessage,
   rbot: RBotSocket

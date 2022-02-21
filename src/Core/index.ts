@@ -6,7 +6,7 @@ import { Boom } from "@hapi/boom";
 import P from "pino";
 import { Logger } from "../utils/logger";
 import { messageHandler } from "./message";
-import { getAuth } from "./authorization";
+import { Authorization as AuthorizationUtils } from "./authorization";
 import { RBotSocket, EnvProps } from "../types";
 import { messageHelper } from "./message-helper";
 import sizeOf from "object-sizeof";
@@ -21,10 +21,12 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
         printQRInTerminal: true,
         logger: P({ level: "silent" }),
         auth: state,
+        version: [2, 2204, 13],
+        browser: ["Rdev", "RDev", "RDev"],
       })),
       messageHelper,
       ENV: env,
-      authorization: { getAuth },
+      authorization: AuthorizationUtils,
     };
 
     Singleton.RBot = rBot;
@@ -32,11 +34,11 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
     rBot.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect } = update;
       Logger.bot(
-        `Connection ${update.connection}, last disconnect ${update.lastDisconnect}`
+        `Connection ${update.connection}, last disconnect ${JSON.stringify(
+          update.lastDisconnect
+        )}`
       );
       if (connection === "close") {
-        console.log(connection);
-
         // reconnect if not logged out
         if (
           (lastDisconnect?.error as Boom)?.output?.statusCode !==
@@ -70,6 +72,7 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
 
     return rBot;
   } catch (error) {
+    console.log(error);
     throw new Error("Failed to instance WA Socket");
   }
 }

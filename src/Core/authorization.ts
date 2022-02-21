@@ -87,5 +87,37 @@ const getAuth = {
   },
 };
 
-export type AuthorizationHelper = { getAuth: typeof getAuth };
-export { getAuth };
+function isAllowed(
+  auth: AuthRoleType,
+  listAuth: AuthRoleType | Array<AuthRoleType>
+): boolean {
+  if (Array.isArray(listAuth)) return Boolean(listAuth.indexOf(auth) >= 0);
+  else return listAuth == auth;
+}
+
+function isExcepted(
+  auth: AuthRoleType,
+  listExcept: AuthRoleType | Array<AuthRoleType>
+): boolean {
+  return !isAllowed(auth, listExcept);
+}
+
+const Authorization: AuthorizationHelper = {
+  getAuth,
+  isAllowed,
+  isExcepted,
+};
+
+export type AuthorizationHelper = {
+  getAuth: typeof getAuth;
+  isAllowed: (
+    auth: AuthRoleType,
+    listAuth: AuthRoleType | Array<AuthRoleType>
+  ) => boolean;
+  isExcepted: (
+    auth: AuthRoleType,
+    listAuth: AuthRoleType | Array<AuthRoleType>
+  ) => boolean;
+};
+
+export { Authorization };

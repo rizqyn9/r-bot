@@ -8,6 +8,8 @@ sessions/
 .env
 rbot_session.json
 
+*session.json
+
 
 
 
