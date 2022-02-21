@@ -1,4 +1,4 @@
-import { GroupData, GroupModels, UserData, UserModels } from "../models";
+import { GroupModels, UserModels } from "../models";
 import { Logger } from "../utils/logger";
 
 export async function getData(
@@ -10,7 +10,7 @@ export async function getData(
 }
 
 export const group = {
-  update: async (jid: string, data: Partial<GroupData>) => {
+  update: async (jid: string, data: Partial<GroupProps>) => {
     return await GroupModels.findOneAndUpdate({ jid }, { ...data }).then(
       (result) => result
     );
@@ -18,7 +18,7 @@ export const group = {
 };
 
 export const user = {
-  update: async (jid: string, data: Partial<UserData>) => {
+  update: async (jid: string, data: Partial<UserProps>) => {
     return await UserModels.findOneAndUpdate({ jid }, { ...data }).then(
       (result) => result
     );
@@ -26,7 +26,7 @@ export const user = {
 };
 
 export const registUser = {
-  guest: async (data: Partial<UserData>): Promise<UserData | null> => {
+  guest: async (data: Partial<UserProps>): Promise<UserProps | null> => {
     return await UserModels.create({ ...data, isRegistered: false }).then(
       (result) => {
         if (result) {
@@ -39,7 +39,7 @@ export const registUser = {
       }
     );
   },
-  auth: async (data: Partial<UserData>): Promise<UserData | null> => {
+  auth: async (data: Partial<UserProps>): Promise<UserProps | null> => {
     return await UserModels.create({ ...data, isRegistered: true }).then(
       (result) => {
         if (result) {
@@ -55,7 +55,7 @@ export const registUser = {
 };
 
 export const registGroup = {
-  guest: async (data: Partial<GroupData>): Promise<GroupData | null> => {
+  guest: async (data: Partial<GroupProps>): Promise<GroupProps | null> => {
     return await GroupModels.create({ ...data, isRegistered: false }).then(
       (result) => {
         if (result) {
@@ -72,7 +72,7 @@ export const registGroup = {
       }
     );
   },
-  auth: async (data: Partial<UserData>): Promise<GroupData | null> => {
+  auth: async (data: Partial<GroupProps>): Promise<GroupProps | null> => {
     return await GroupModels.create({ ...data, isRegistered: true }).then(
       (result) => {
         if (result) {

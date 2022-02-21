@@ -1,7 +1,6 @@
 import type { WAMessage, MessageUpdateType } from "@adiwajshing/baileys";
 import type { Prefix, RMessage } from "../types";
 import * as Redis from "./redis-store";
-import { getAuth } from "./authentication";
 import * as Message from "../messageHandler";
 import { RBotSocket } from "../types/index";
 
@@ -34,16 +33,12 @@ export async function messageHandler(
     /**
      * Parse message
      */
-    let msg: RMessage = await messageParser(WAmsg);
+    let msg: RMessage = await messageParser(WAmsg, rbot);
 
+    console.log(msg);
     await Message.messageRouter(msg, rbot);
 
-    if (msg.auth && !msg.auth.isRegistered) {
-      console.log("Authentication Routes");
-      return await Message.authentication(msg, rbot);
-    }
-
-    if (msg.auth && msg.auth.isRegistered) {
+    if (rbot.authorization.isAllowed(msg.auth, ["GUEST", "ADMIN_BOT"])) {
       if (msg.prefix && msg.prefix.cmd1 == "test") {
         rbot.messageHelper.sendMessageInfo({
           jid: msg.jid,
@@ -54,7 +49,7 @@ export async function messageHandler(
       if (!msg.isGroup) {
         return rbot.messageHelper.sendMessageError({
           jid: msg.jid,
-          text: "you dont have authorization for this action",
+          text: "You dont have authorization to perform this action",
         });
       }
     }
@@ -73,15 +68,30 @@ export async function messageHandler(
   }
 }
 
-async function messageParser(msg: WAMessage): Promise<RMessage> {
+// Problem in message Parser
+async function messageParser(
+  msg: WAMessage,
+  rbot: RBotSocket
+): Promise<RMessage> {
   let isGroup = Boolean(msg.key.participant);
-
-  let auth = isGroup ? await getAuth.group(msg) : await getAuth.user(msg);
+  let getAuth = isGroup
+    ? await rbot.authorization.getAuth.group(msg)
+    : await rbot.authorization.getAuth.user(msg);
   let prefix = getPrefix(
     msg.message?.conversation || msg.message?.imageMessage?.caption || ""
   );
+
   if (!prefix) console.log(msg);
-  return { ...msg, prefix, auth, jid: msg.key.remoteJid!, isGroup };
+
+  return {
+    ...msg,
+    jid: msg.key.remoteJid!,
+    auth: getAuth?.authProps.role || "GUEST",
+    isGroup,
+    userData: isGroup ? undefined : (getAuth as UserProps),
+    groupData: isGroup ? (getAuth as GroupProps) : undefined,
+    prefix,
+  };
 }
 
 function getPrefix(msg: string, prefix: string = "#"): Prefix | false {

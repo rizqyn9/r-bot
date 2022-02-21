@@ -1,8 +1,8 @@
 import process from "process";
 import { config } from "dotenv";
 config();
-import { MongoConnect, RedisClient } from "./src/lib";
-import { StartRBot } from "./src/Core";
+import { MongoConnect, RedisClient } from "./src/libs";
+import { StartRBot } from "./src/core";
 import { FigletChalkStarter, Logger } from "./src/utils/logger";
 import { cleanEnv, email, makeValidator, num, str } from "envalid";
 

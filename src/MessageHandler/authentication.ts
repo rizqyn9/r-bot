@@ -6,7 +6,7 @@ export async function authentication(
   msg: RMessage,
   rbot: RBotSocket
 ): Promise<any> {
-  if (msg.auth?.isRegistered) {
+  if (msg.auth !== "GUEST") {
     return rbot.messageHelper.sendMessageError({
       jid: msg.jid,
       text: `${msg.pushName || "Unknown"} already registered`,
@@ -35,8 +35,8 @@ export async function authentication(
 async function authGroup(msg: RMessage, parse: string[], rbot: RBotSocket) {
   await MongoStore.group
     .update(msg.jid, {
-      groupName: parse[0],
-      isRegistered: true,
+      pushName: parse[0],
+      authProps: { role: "USER" },
     })
     .then(async (val) => {
       if (val) {
@@ -56,7 +56,7 @@ async function authUser(msg: RMessage, parse: string[], rbot: RBotSocket) {
   await MongoStore.user
     .update(msg.jid, {
       pushName: parse[0],
-      isRegistered: true,
+      authProps: { role: "USER" },
     })
     .then(async (val) => {
       if (val) {
