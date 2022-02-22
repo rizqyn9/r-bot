@@ -1,7 +1,4 @@
-import makeWASocket, {
-  useSingleFileAuthState,
-  DisconnectReason,
-} from "@adiwajshing/baileys";
+import makeWASocket, { useSingleFileAuthState, DisconnectReason } from "@adiwajshing/baileys";
 import { Boom } from "@hapi/boom";
 import P from "pino";
 import { messageHandler } from "./message";
@@ -39,16 +36,11 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
     rBot.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect } = update;
       rBot.logger.bot(
-        `Connection ${update.connection}, last disconnect ${JSON.stringify(
-          update.lastDisconnect
-        )}`
+        `Connection ${update.connection}, last disconnect ${JSON.stringify(update.lastDisconnect)}`,
       );
       if (connection === "close") {
         // reconnect if not logged out
-        if (
-          (lastDisconnect?.error as Boom)?.output?.statusCode !==
-          DisconnectReason.loggedOut
-        ) {
+        if ((lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut) {
           rBot.logger.error(`Restart`);
           await StartRBot({ env });
         } else {

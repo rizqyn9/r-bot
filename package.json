@@ -11,7 +11,8 @@
     "production": "node dist",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",
     "test": "nodemon --watch './**/*.ts' --exec 'ts-node' ./src/test/index.ts",
-    "start": "node -r tsconfig-paths/register ./dist"
+    "start": "node -r tsconfig-paths/register ./dist",
+    "format": "prettier --write \"**/*.+(ts)\""
   },
   "author": "rizqyn9 <54632504+rizqyn9@users.noreply.github.com>",
   "license": "MIT",

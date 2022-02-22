@@ -3,11 +3,7 @@ import type { Prefix, RBotSocket, RMessage } from "../types";
 import * as Redis from "./redis-store";
 import * as Message from "../messageHandler";
 
-export async function messageHandler(
-  WAmsg: WAMessage,
-  type: MessageUpdateType,
-  rbot: RBotSocket
-) {
+export async function messageHandler(WAmsg: WAMessage, type: MessageUpdateType, rbot: RBotSocket) {
   try {
     if (WAmsg.key.fromMe) return;
     if (type !== "notify") {
@@ -71,17 +67,12 @@ export async function messageHandler(
 }
 
 // Problem in message Parser
-async function messageParser(
-  msg: WAMessage,
-  rbot: RBotSocket
-): Promise<RMessage> {
+async function messageParser(msg: WAMessage, rbot: RBotSocket): Promise<RMessage> {
   let isGroup = Boolean(msg.key.participant);
   let getAuth = isGroup
     ? await rbot.authorization.getAuth.group(msg)
     : await rbot.authorization.getAuth.user(msg);
-  let prefix = getPrefix(
-    msg.message?.conversation || msg.message?.imageMessage?.caption || ""
-  );
+  let prefix = getPrefix(msg.message?.conversation || msg.message?.imageMessage?.caption || "");
 
   if (!prefix) console.log(msg);
 

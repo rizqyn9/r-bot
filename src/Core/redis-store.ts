@@ -2,10 +2,7 @@ import { RedisClient } from "../libs";
 import * as Mongo from "./mongo-store";
 import { Logger } from "../utils/logger";
 
-export async function checkExistingKey(
-  key: string,
-  cb?: () => any
-): Promise<boolean> {
+export async function checkExistingKey(key: string, cb?: () => any): Promise<boolean> {
   return await RedisClient.exists(key).then((val) => Boolean(val));
 }
 

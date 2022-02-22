@@ -2,10 +2,7 @@ import type { RMessage, StructMessages, RBotSocket } from "../types";
 import * as Utils from "../utils";
 import { MongoStore, RedisStore } from "../core";
 
-export async function authentication(
-  msg: RMessage,
-  rbot: RBotSocket
-): Promise<any> {
+export async function authentication(msg: RMessage, rbot: RBotSocket): Promise<any> {
   if (msg.auth !== "GUEST") {
     return rbot.messageHelper.sendMessageError({
       jid: msg.jid,
@@ -14,16 +11,12 @@ export async function authentication(
   }
   if (msg.prefix && msg.prefix.text) {
     try {
-      let parse = Utils.parseSymbol(
-        msg.prefix.text.replace(msg.prefix.cmd1, "")
-      );
+      let parse = Utils.parseSymbol(msg.prefix.text.replace(msg.prefix.cmd1, ""));
 
       if (parse.length < 2) {
         throw new Error(`Example #Daftar asdad | asd`);
       } else {
-        return msg.isGroup
-          ? await authGroup(msg, parse, rbot)
-          : await authUser(msg, parse, rbot);
+        return msg.isGroup ? await authGroup(msg, parse, rbot) : await authUser(msg, parse, rbot);
       }
     } catch (error) {
       if (error instanceof Error) throw error;

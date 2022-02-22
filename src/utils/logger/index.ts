@@ -1,2 +1,2 @@
-export * from "./logger"
-export * from "./logger.figlet"
+export * from "./logger";
+export * from "./logger.figlet";
