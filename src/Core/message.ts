@@ -18,6 +18,7 @@ export async function messageHandler(
     }
 
     console.log(WAmsg);
+    console.log(JSON.stringify(WAmsg.message));
 
     /**
      * clearance all redis

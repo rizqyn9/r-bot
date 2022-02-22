@@ -1,11 +1,20 @@
 import { RMessage, RBotSocket } from "../types";
 import { adminHandler } from "./admin";
+import { commandRoute } from "./command";
 
 async function routesHandler(msg: RMessage, rbot: RBotSocket) {
-  console.log(msg);
   if (msg.prefix && msg.prefix.prefix) {
-    if (msg.prefix.cmd1 === "admin") {
-      adminHandler(msg, rbot);
+    switch (msg.prefix.cmd1) {
+      case "admin":
+        adminHandler(msg, rbot);
+        break;
+
+      case "command":
+        commandRoute(msg, rbot);
+        break;
+
+      default:
+        break;
     }
   }
 }

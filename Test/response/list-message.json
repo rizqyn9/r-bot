@@ -1,0 +1,122 @@
+[
+  {
+    "messageContextInfo": {
+      "deviceListMetadata": {
+        "senderKeyHash": "MSASoWArpmSmCQ==",
+        "senderTimestamp": "1645450053",
+        "recipientKeyHash": "n3wgohHFtJGh9w==",
+        "recipientTimestamp": "1645454663"
+      },
+      "deviceListMetadataVersion": 2
+    },
+    "listResponseMessage": {
+      "title": "Tambah Perintah",
+      "listType": "SINGLE_SELECT",
+      "singleSelectReply": {},
+      "contextInfo": {
+        "stanzaId": "BAE5D6A5D0D43934",
+        "participant": "6285156526447@s.whatsapp.net",
+        "quotedMessage": {
+          "listMessage": {
+            "title": "Custom command",
+            "description": "dengan custom command memungkina pengguna untuk membuat perintah dan jawaban sendiri",
+            "buttonText": "Cara penggunaan",
+            "listType": "SINGLE_SELECT",
+            "sections": [
+              {
+                "title": "Perintah command",
+                "rows": [
+                  {
+                    "title": "Tambah Perintah",
+                    "description": "perintah untuk membuat custom command"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "description": "perintah untuk membuat custom command"
+    }
+  },
+  {
+    "messageContextInfo": {
+      "deviceListMetadata": {
+        "senderKeyHash": "MSASoWArpmSmCQ==",
+        "senderTimestamp": "1645450053",
+        "recipientKeyHash": "n3wgohHFtJGh9w==",
+        "recipientTimestamp": "1645454663"
+      },
+      "deviceListMetadataVersion": 2
+    },
+    "listResponseMessage": {
+      "title": "Tambah Perintah",
+      "listType": "SINGLE_SELECT",
+      "singleSelectReply": {},
+      "contextInfo": {
+        "stanzaId": "BAE5BA13895D98BD",
+        "participant": "6285156526447@s.whatsapp.net",
+        "quotedMessage": {
+          "listMessage": {
+            "title": "Custom command",
+            "description": "dengan custom command memungkina pengguna untuk membuat perintah dan jawaban sendiri",
+            "buttonText": "Cara penggunaan",
+            "listType": "SINGLE_SELECT",
+            "sections": [
+              {
+                "title": "Perintah command",
+                "rows": [
+                  {
+                    "title": "Tambah Perintah",
+                    "description": "perintah untuk membuat custom command"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "description": "perintah untuk membuat custom command"
+    }
+  },
+  {
+    "messageContextInfo": {
+      "deviceListMetadata": {
+        "senderKeyHash": "MSASoWArpmSmCQ==",
+        "senderTimestamp": "1645450053",
+        "recipientKeyHash": "n3wgohHFtJGh9w==",
+        "recipientTimestamp": "1645454663"
+      },
+      "deviceListMetadataVersion": 2
+    },
+    "listResponseMessage": {
+      "title": "Tambah Perintah",
+      "listType": "SINGLE_SELECT",
+      "singleSelectReply": {},
+      "contextInfo": {
+        "stanzaId": "BAE52EA3F77E9797",
+        "participant": "6285156526447@s.whatsapp.net",
+        "quotedMessage": {
+          "listMessage": {
+            "title": "Custom command",
+            "description": "dengan custom command memungkina pengguna untuk membuat perintah dan jawaban sendiri",
+            "buttonText": "Cara penggunaan",
+            "listType": "SINGLE_SELECT",
+            "sections": [
+              {
+                "title": "Perintah command",
+                "rows": [
+                  {
+                    "title": "Tambah Perintah",
+                    "description": "perintah untuk membuat custom command"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "description": "perintah untuk membuat custom command"
+    }
+  }
+]
