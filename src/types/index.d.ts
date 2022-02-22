@@ -8,7 +8,7 @@ export * from "../../types";
 
 import type { WASocket } from "@adiwajshing/baileys";
 import { AuthorizationProps } from "~/core/authorization";
-import { MessageHelper } from "~/core/message-helper";
+import { MessageHelper } from "../core/message-helper";
 import { AuthorizationHelper } from "../core/authorization";
 import { LoggerHelper } from "../utils/logger";
 
