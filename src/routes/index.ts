@@ -1,6 +1,7 @@
 import { RMessage, RBotSocket } from "../types";
 import { adminHandler } from "./admin";
-import { commandRoute } from "./command";
+import { commandRouter } from "./command";
+import { helpRouter } from "./services";
 
 async function routesHandler(msg: RMessage, rbot: RBotSocket) {
   if (msg.prefix && msg.prefix.prefix) {
@@ -10,7 +11,11 @@ async function routesHandler(msg: RMessage, rbot: RBotSocket) {
         break;
 
       case "command":
-        commandRoute(msg, rbot);
+        commandRouter(msg, rbot);
+        break;
+
+      case "help":
+        helpRouter(msg, rbot);
         break;
 
       default:

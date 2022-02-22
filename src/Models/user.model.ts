@@ -20,6 +20,12 @@ const UserSchema = new Schema<UserProps>({
     type: Object,
     default: undefined,
   },
+  notes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "notes",
+    },
+  ],
 });
 
 export const UserModels = model<UserProps>("users", UserSchema);
