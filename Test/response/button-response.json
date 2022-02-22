@@ -1,0 +1,82 @@
+[
+  {
+    "messageContextInfo": {
+      "deviceListMetadata": {
+        "senderKeyHash": "MSASoWArpmSmCQ==",
+        "senderTimestamp": "1645450053",
+        "recipientKeyHash": "n3wgohHFtJGh9w==",
+        "recipientTimestamp": "1645454663"
+      },
+      "deviceListMetadataVersion": 2
+    },
+    "buttonsResponseMessage": {
+      "selectedButtonId": "1",
+      "selectedDisplayText": "Test flow",
+      "contextInfo": {
+        "stanzaId": "BAE50EA3E9F677E4",
+        "participant": "6285156526447@s.whatsapp.net",
+        "quotedMessage": {
+          "buttonsMessage": {
+            "contentText": "dengan custom command memungkina pengguna untuk membuat perintah dan jawaban sendiri",
+            "buttons": [
+              {
+                "buttonId": "1",
+                "buttonText": { "displayText": "Test flow" },
+                "type": "RESPONSE",
+                "nativeFlowInfo": { "paramsJson": "Testt flow" }
+              },
+              {
+                "buttonId": "2",
+                "buttonText": { "displayText": "Test Response" },
+                "type": "RESPONSE",
+                "nativeFlowInfo": { "paramsJson": "Testt Response" }
+              }
+            ],
+            "headerType": "EMPTY"
+          }
+        }
+      },
+      "type": "DISPLAY_TEXT"
+    }
+  },
+  {
+    "messageContextInfo": {
+      "deviceListMetadata": {
+        "senderKeyHash": "MSASoWArpmSmCQ==",
+        "senderTimestamp": "1645450053",
+        "recipientKeyHash": "n3wgohHFtJGh9w==",
+        "recipientTimestamp": "1645454663"
+      },
+      "deviceListMetadataVersion": 2
+    },
+    "buttonsResponseMessage": {
+      "selectedButtonId": "2",
+      "selectedDisplayText": "Test Response",
+      "contextInfo": {
+        "stanzaId": "BAE50EA3E9F677E4",
+        "participant": "6285156526447@s.whatsapp.net",
+        "quotedMessage": {
+          "buttonsMessage": {
+            "contentText": "dengan custom command memungkina pengguna untuk membuat perintah dan jawaban sendiri",
+            "buttons": [
+              {
+                "buttonId": "1",
+                "buttonText": { "displayText": "Test flow" },
+                "type": "RESPONSE",
+                "nativeFlowInfo": { "paramsJson": "Testt flow" }
+              },
+              {
+                "buttonId": "2",
+                "buttonText": { "displayText": "Test Response" },
+                "type": "RESPONSE",
+                "nativeFlowInfo": { "paramsJson": "Testt Response" }
+              }
+            ],
+            "headerType": "EMPTY"
+          }
+        }
+      },
+      "type": "DISPLAY_TEXT"
+    }
+  }
+]

@@ -15,6 +15,13 @@ export const messageHelper = {
   sendMessageInfo(props: MessageProps & { text: string }) {
     Singleton.RBot.sendMessage(props.jid, { text: `ℹ ${props.text}` });
   },
+  sendTemp(jid: string, tempKey: keyof typeof templateMessage) {
+    Singleton.RBot.sendMessage(jid, { text: templateMessage[tempKey] });
+  },
+};
+
+const templateMessage = {
+  noauth: "❌ You dont have authorization to perform this action",
 };
 
 export type MessageHelper = typeof messageHelper;
