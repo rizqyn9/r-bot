@@ -8,12 +8,9 @@ export async function messageHandler(WAmsg: WAMessage, type: MessageUpdateType, 
     if (WAmsg.key.fromMe) return;
     if (type !== "notify") {
       // Handle on Development mode
-      console.log(WAmsg.key.remoteJid, type.toUpperCase());
+      rbot.logger.warn(WAmsg.key.remoteJid, type.toUpperCase());
       return;
     }
-
-    console.log(WAmsg);
-    console.log(JSON.stringify(WAmsg.message));
 
     /**
      * clearance all redis
@@ -33,24 +30,28 @@ export async function messageHandler(WAmsg: WAMessage, type: MessageUpdateType, 
      */
     let msg: RMessage = await messageParser(WAmsg, rbot);
 
-    console.log(msg);
+    /**
+     * !Logger
+     */
+    rbot.logger.dev(JSON.stringify(msg));
+
     await Message.messageRouter(msg, rbot);
 
-    if (rbot.authorization.isAllowed(msg.auth, ["GUEST", "ADMIN_BOT"])) {
-      if (msg.prefix && msg.prefix.cmd1 == "test") {
-        // rbot.messageHelper.sendMessageInfo({
-        //   jid: msg.jid,
-        //   text: JSON.stringify(msg),
-        // });
-      }
-    } else {
-      if (!msg.isGroup) {
-        return rbot.messageHelper.sendMessageError({
-          jid: msg.jid,
-          text: "You dont have authorization to perform this action",
-        });
-      }
-    }
+    // if (rbot.authorization.isAllowed(msg.auth, ["GUEST", "ADMIN_BOT"])) {
+    //   if (msg.prefix && msg.prefix.cmd1 == "test") {
+    //     // rbot.messageHelper.sendMessageInfo({
+    //     //   jid: msg.jid,
+    //     //   text: JSON.stringify(msg),
+    //     // });
+    //   }
+    // } else {
+    //   if (!msg.isGroup) {
+    //     return rbot.messageHelper.sendMessageError({
+    //       jid: msg.jid,
+    //       text: "You dont have authorization to perform this action",
+    //     });
+    //   }
+    // }
   } catch (error) {
     console.log(error);
     if (error instanceof Error)
@@ -72,7 +73,10 @@ async function messageParser(msg: WAMessage, rbot: RBotSocket): Promise<RMessage
   let getAuth = isGroup
     ? await rbot.authorization.getAuth.group(msg)
     : await rbot.authorization.getAuth.user(msg);
-  let prefix = getPrefix(msg.message?.conversation || msg.message?.imageMessage?.caption || "");
+  let prefix = getPrefix({
+    msg: msg.message?.conversation || msg.message?.imageMessage?.caption || "",
+    skipPrefix: rbot.config.personalMsgWithoutPrefix,
+  });
 
   if (!prefix) console.log(msg);
 
@@ -87,9 +91,19 @@ async function messageParser(msg: WAMessage, rbot: RBotSocket): Promise<RMessage
   };
 }
 
-function getPrefix(msg: string, prefix: string = "#"): Prefix | false {
-  if (msg.indexOf(prefix) >= 0) {
-    let noPrefix = msg.slice(msg.indexOf(prefix) + 1);
+function getPrefix({
+  msg,
+  prefix = "#",
+  skipPrefix = false,
+}: {
+  msg: string;
+  prefix?: string;
+  skipPrefix?: boolean;
+}): Prefix | false {
+  skipPrefix && (msg = `#${msg}`);
+  let indexPrefix = msg.indexOf(prefix);
+  if (indexPrefix >= 0) {
+    let noPrefix = msg.slice(indexPrefix + 1);
     let cmd = noPrefix.trim().split(" ", 2);
 
     return {

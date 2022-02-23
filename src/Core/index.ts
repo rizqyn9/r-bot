@@ -12,6 +12,7 @@ import { getNumber } from "../utils/index";
 import { Authorization as AuthorizationHelper } from "./authorization";
 import { Logger as LoggerHelper } from "../utils/logger";
 import { messageHelper as MessageHelper } from "./message-helper";
+import { rbotCOnfig } from "../config";
 
 const { state, saveState } = useSingleFileAuthState("./rbot_session.json");
 
@@ -26,6 +27,7 @@ async function StartRBot({ env }: { env: EnvProps }): Promise<RBotSocket> {
         browser: ["Rdev", "RDev", "RDev"],
       })),
       ENV: env,
+      config: rbotCOnfig,
       messageHelper: MessageHelper,
       authorization: AuthorizationHelper,
       logger: LoggerHelper,

@@ -3,6 +3,8 @@
 // import type { Prefix } from "../type";
 // import { getNumber } from "../utils";
 
+import { testParseData } from "./spreadsheet";
+
 // function getPrefix(msg: string, prefix: string = "#"): Prefix | false {
 // 	if (msg.indexOf(prefix) >= 0) {
 // 		let noPrefix = msg.slice(msg.indexOf(prefix) + 1);
@@ -34,3 +36,10 @@
 
 // let examp1 = "628985665498@s.whatsapp.net";
 // console.log(getNumber(examp1));
+
+async function Test() {
+  console.log("asdsad");
+  // let a = await test();
+  testParseData();
+}
+Test();
